@@ -1,10 +1,13 @@
 <!DOCTYPE html>
-<!-- saved from url=(0049)file:///Users/jerrickhuang/Downloads/index_6.html -->
+<!-- saved from url=(0050)file:///Users/jerrickhuang/Downloads/index_12.html -->
 <html lang="zh-TW"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
 <title>薪資真相 — 平均值 vs 中位數</title>
-<link href="./薪資真相 — 平均值 vs 中位數v4_files/css2" rel="stylesheet">
+<link href="./薪資真相 — 平均值 vs 中位數v5_files/css2" rel="stylesheet">
 <style>
 :root {
   --green: #06C755;
@@ -248,7 +251,7 @@ input[type=range]::-moz-range-thumb {
    SCREEN 3 — CHART
 ══════════════════════════════════ */
 .chart-container { position: relative; width: 100%; height: 260px; margin: 16px 0; }
-#salary-chart { width: 100%; height: 100%; }
+#salary-chart { width: 100%; height: 100%; display: block; }
 
 .chart-legend { display: flex; gap: 16px; margin-bottom: 12px; flex-wrap: wrap; }
 .legend-item { display: flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 500; }
@@ -445,12 +448,20 @@ input[type=range]::-moz-range-thumb {
 </style>
 </head>
 <body>
+<script>
+// Reset all screen state immediately before DOM renders
+document.addEventListener('DOMContentLoaded', function() {
+  document.querySelectorAll('.screen').forEach(function(s) { s.classList.remove('active'); });
+  var qr = document.getElementById('screen-qr');
+  if (qr) qr.classList.add('active');
+});
+</script>
 
 <!-- ══ QR CODE SCREEN ══ -->
-<div id="screen-qr" class="screen">
+<div id="screen-qr" class="screen active">
   <div class="qr-wrap">
     <div class="qr-title">📊 薪資真相</div>
-    <img src="./薪資真相 — 平均值 vs 中位數v4_files/saved_resource" width="240" height="240" alt="QR Code" style="border-radius: 12px; box-shadow: rgba(0, 0, 0, 0.08) 0px 4px 24px;">
+    <img src="./薪資真相 — 平均值 vs 中位數v5_files/saved_resource" width="240" height="240" alt="QR Code" style="border-radius: 12px; box-shadow: rgba(0, 0, 0, 0.08) 0px 4px 24px;">
     <div class="qr-sub">用手機掃描 QR Code<br>一起參與互動 Demo</div>
     <div class="qr-url" id="qr-url-text">https://jerrickhuang.github.io/salary-demo/</div>
     <button class="btn-next" style="width:240px;margin-top:8px" onclick="startDemo()">▶ 開始報告</button>
@@ -474,24 +485,24 @@ input[type=range]::-moz-range-thumb {
     <p class="h2">根據主計處於 2025 年 2 月 17 日，最新發布台灣 2024 年上班族平均月薪數值，您認為是多少？</p>
     <p class="body mt12">憑感覺猜，台灣上班族平均月薪，ABCD 哪個？</p>
     <div class="quiz-options">
-      <button class="quiz-option selected wrong" onclick="selectOption(this,&#39;A&#39;)" id="opt-A" style="pointer-events: none;">
+      <button class="quiz-option" onclick="selectOption(this,&#39;A&#39;)" id="opt-A">
         <span class="opt-label">A</span>
         <span class="opt-value">3 萬多</span>
       </button>
-      <button class="quiz-option" onclick="selectOption(this,&#39;B&#39;)" id="opt-B" style="pointer-events: none;">
+      <button class="quiz-option" onclick="selectOption(this,&#39;B&#39;)" id="opt-B">
         <span class="opt-label">B</span>
         <span class="opt-value">4 萬多</span>
       </button>
-      <button class="quiz-option" onclick="selectOption(this,&#39;C&#39;)" id="opt-C" style="pointer-events: none;">
+      <button class="quiz-option" onclick="selectOption(this,&#39;C&#39;)" id="opt-C">
         <span class="opt-label">C</span>
         <span class="opt-value">5 萬多</span>
       </button>
-      <button class="quiz-option correct" onclick="selectOption(this,&#39;D&#39;)" id="opt-D" style="pointer-events: none;">
+      <button class="quiz-option" onclick="selectOption(this,&#39;D&#39;)" id="opt-D">
         <span class="opt-label">D</span>
         <span class="opt-value">6 萬多</span>
       </button>
     </div>
-    <div class="reveal-box show" id="quiz-reveal">
+    <div class="reveal-box" id="quiz-reveal">
       <div class="text-center">
         <div class="stat-number">60,984 元</div>
         <div class="stat-label mt8">2024 年全體受僱員工每人每月總薪資平均數</div>
@@ -505,7 +516,7 @@ input[type=range]::-moz-range-thumb {
     </div>
   </div>
   <div class="footer">
-    <button class="btn-next" id="btn-1" onclick="goTo(2)">下一個環節 →</button>
+    <button class="btn-next" id="btn-1" onclick="goTo(2)" disabled="">揭曉答案</button>
   </div>
 </div>
 
@@ -581,23 +592,22 @@ input[type=range]::-moz-range-thumb {
   </svg></div>
       <div class="person-salary" id="sal-8">45K</div>
     </div><div class="person-card mystery">
-    <div class="person-avatar vip" id="av-9"><svg viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <circle cx="14" cy="9" r="5" fill="#F59E0B"></circle>
-    <path d="M4 26c0-5.523 4.477-10 10-10s10 4.477 10 10" stroke="#D97706" stroke-width="2" stroke-linecap="round"></path>
-    <text x="14" y="27" text-anchor="middle" font-size="8" fill="#92400E">👑</text>
+    <div class="person-avatar normal" id="av-9"><svg viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="14" cy="9" r="5" fill="#60A5FA"></circle>
+    <path d="M4 26c0-5.523 4.477-10 10-10s10 4.477 10 10" stroke="#2563EB" stroke-width="2" stroke-linecap="round"></path>
   </svg></div>
-    <div class="person-salary" id="sal-9" style="color: rgb(194, 65, 12);">1190K 💰</div>
+    <div class="person-salary" id="sal-9" style="color: var(--gray-800);">30K</div>
   </div></div>
 
     <div class="stats-row">
       <div class="stat-box blue-box">
         <div class="sb-label">📊 中位數</div>
-        <div class="sb-value" id="stat-median">34,000</div>
+        <div class="sb-value" id="stat-median">32,500</div>
         <div class="caption mt8" style="color:var(--mid-blue)">幾乎不動</div>
       </div>
       <div class="stat-box orange-box">
         <div class="sb-label">📈 平均值</div>
-        <div class="sb-value" id="stat-mean">150,200</div>
+        <div class="sb-value" id="stat-mean">34,200</div>
         <div class="caption mt8" style="color:#C2410C">隨第10人起舞</div>
       </div>
     </div>
@@ -605,7 +615,7 @@ input[type=range]::-moz-range-thumb {
     <div class="slider-wrap">
       <div class="slider-label-row">
         <span class="caption">第 10 人月薪</span>
-        <span class="slider-current" id="slider-val">1,190,000</span>
+        <span class="slider-current" id="slider-val">30,000</span>
       </div>
       <input type="range" id="salary-slider" min="30000" max="5000000" step="10000" value="30000" oninput="updateSlider(this.value)" ontouchstart="">
       <div style="display:flex;justify-content:space-between;" class="mt8">
@@ -615,14 +625,14 @@ input[type=range]::-moz-range-thumb {
     </div>
 
     <div class="comment-box">
-      <p class="comment-text" id="slider-comment">一個人，讓所有人「平均」都變成高薪族了</p>
+      <p class="comment-text" id="slider-comment">試著把滑桿往右拉⋯⋯</p>
     </div>
 
-    <div id="freeze-msg" style="display: block; margin-top: 16px; padding: 14px 16px; background: rgb(254, 249, 195); border-radius: 12px;">
+    <div id="freeze-msg" style="display:none;margin-top:16px;padding:14px 16px;background:#FEF9C3;border-radius:12px;">
       <p class="body" style="color:#92400E;">前 9 個人的薪水一分都沒有漲。<br><strong>但平均值現在是多少？</strong></p>
     </div>
 
-    <div id="conclusion-msg" style="display: block; margin-top: 16px;">
+    <div id="conclusion-msg" style="display:none;margin-top:16px;">
       <div class="card" style="border-left:4px solid var(--blue);">
         <p style="font-size:16px;font-weight:700;color:var(--black);margin-bottom:8px;">平均值：不管數值如何改變</p>
         <p style="font-size:16px;font-weight:700;color:var(--blue);">中位數：始終如一</p>
@@ -641,7 +651,7 @@ input[type=range]::-moz-range-thumb {
 </div>
 
 <!-- ══ SCREEN 3 — CHART ══ -->
-<div id="screen-3" class="screen active">
+<div id="screen-3" class="screen">
   <div class="nav">
     <span class="nav-title">環節三：真實分布圖</span>
     <div class="nav-steps">
@@ -668,33 +678,35 @@ input[type=range]::-moz-range-thumb {
     </div>
 
     <div class="chart-container">
-      <canvas id="salary-chart" width="880" height="520"></canvas>
+      <canvas id="salary-chart"></canvas>
+      <div id="label-median" style="display:none;position:absolute;background:#EFF6FF;color:#2563EB;font-size:12px;font-weight:700;padding:3px 8px;border-radius:4px;white-space:nowrap;pointer-events:none;">中位數</div>
+      <div id="label-mean" style="display:none;position:absolute;background:#FFF7ED;color:#FF6B2B;font-size:12px;font-weight:700;padding:3px 8px;border-radius:4px;white-space:nowrap;pointer-events:none;">平均值</div>
     </div>
 
-    <div class="chart-text-reveal show" id="ct1">
+    <div class="chart-text-reveal" id="ct1">
       <div class="card" style="border-left:4px solid var(--blue);padding:14px 16px;">
         <p style="font-size:13px;font-weight:700;color:var(--mid-blue);margin-bottom:4px;">中位數：37,274 元</p>
         <p class="body">這條線把台灣所有上班族切成兩半，一半在左，一半在右。這才是「一般人」的薪資位置。</p>
       </div>
     </div>
 
-    <div class="chart-text-reveal mt12 show" id="ct2">
+    <div class="chart-text-reveal mt12" id="ct2">
       <div class="card" style="border-left:4px solid var(--orange);padding:14px 16px;">
         <p style="font-size:13px;font-weight:700;color:#C2410C;margin-bottom:4px;">平均值：46,450 元</p>
         <p class="body">平均值在這裡，和中位數相差將近 9,000 元，比例上差了 24%。但注意看平均線右邊——其實是少數人。</p>
       </div>
     </div>
 
-    <div class="fill-stat show" id="ct3">
+    <div class="fill-stat" id="ct3">
       <div class="fill-stat-number">69%</div>
       <div class="fill-stat-label">的台灣上班族，月薪低於平均值</div>
     </div>
 
-    <div class="chart-text-reveal mt8 show" id="ct4">
+    <div class="chart-text-reveal mt8" id="ct4">
       <p class="body">將近 7 成的人，月薪低於那個被媒體大肆宣傳的 6 萬 1。這不是因為大家薪水低，而是因為少數極高薪的人，把平均值往右拉了。</p>
     </div>
 
-    <div class="chart-text-reveal mt12 show" id="ct5">
+    <div class="chart-text-reveal mt12" id="ct5">
       <p class="body" style="font-weight:700;color:var(--black);">現在知道薪資分布後，我們來試算一下。</p>
     </div>
   </div>
@@ -939,9 +951,17 @@ let chartStep = 0;
 
 // ══ QR CODE ══
 window.addEventListener('load', () => {
-  const url = 'https://jerrickhuang.github.io/salary-demo/';
-  document.getElementById('qr-url-text').textContent = url;
-  const encoded = encodeURIComponent(url);
+  // Force QR screen every time
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById('screen-qr').classList.add('active');
+  window.scrollTo(0, 0);
+
+  const base = 'https://jerrickhuang.github.io/salary-demo/';
+  document.getElementById('qr-url-text').textContent = base;
+
+  // QR code points to timestamped URL — forces fresh load on every scan
+  const qrTarget = base + '?t=' + Date.now();
+  const encoded = encodeURIComponent(qrTarget);
   const img = document.createElement('img');
   img.src = `https://api.qrserver.com/v1/create-qr-code/?size=240x240&data=${encoded}&color=0A0A0A&bgcolor=FFFFFF&margin=2`;
   img.width = 240; img.height = 240;
@@ -965,10 +985,18 @@ function goTo(n) {
     target.scrollTop = 0;
     window.scrollTo(0, 0);
     currentScreen = 'screen-' + n;
+    history.replaceState({screen: n}, '', '?s=' + n);
     if (n === 3) initChart();
-    if (n === 6) {}
   }
 }
+
+// Handle browser back — always go to QR screen
+window.addEventListener('popstate', () => {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById('screen-qr').classList.add('active');
+  window.scrollTo(0, 0);
+  history.replaceState(null, '', window.location.pathname);
+});
 
 // ══ SCREEN 1: QUIZ ══
 function selectOption(el, opt) {
@@ -1110,12 +1138,12 @@ function initChart() {
   canvas.height = rect.height * dpr;
   ctx.scale(dpr, dpr);
   const W = rect.width, H = rect.height;
-  const PAD = {left: 10, right: 10, top: 36, bottom: 24};
+  const PAD = {left: 10, right: 10, top: 50, bottom: 24};
   const chartW = W - PAD.left - PAD.right;
   const chartH = H - PAD.top - PAD.bottom;
 
   const minX = 10000, maxX = 200000;
-  const maxY = 16;
+  const maxY = 24;
 
   function toX(sal) { return PAD.left + (sal - minX) / (maxX - minX) * chartW; }
   function toY(pct) { return PAD.top + chartH - (pct / maxY) * chartH; }
@@ -1177,13 +1205,10 @@ function initChart() {
       ctx.beginPath(); ctx.moveTo(mx, PAD.top); ctx.lineTo(mx, PAD.top + chartH);
       ctx.strokeStyle = '#2563EB'; ctx.lineWidth = 2; ctx.setLineDash([]);
       ctx.stroke();
-      const mLabelW = 44, mLabelH = 20;
-      const mLabelX = mx - mLabelW - 6;
-      const mLabelY = PAD.top - 26;
-      ctx.fillStyle = '#EFF6FF';
-      ctx.beginPath(); ctx.roundRect(mLabelX, mLabelY, mLabelW, mLabelH, 4); ctx.fill();
-      ctx.fillStyle = '#2563EB'; ctx.font = 'bold 11px Noto Sans TC'; ctx.textAlign = 'center';
-      ctx.fillText('中位數', mLabelX + mLabelW / 2, mLabelY + 14);
+      const lm = document.getElementById('label-median');
+      lm.style.left = (mx / dpr - 22) + 'px';
+      lm.style.top = (PAD.top - 24) + 'px';
+      lm.style.display = 'block';
     }
 
     // Mean line
@@ -1192,13 +1217,10 @@ function initChart() {
       ctx.beginPath(); ctx.moveTo(ax, PAD.top); ctx.lineTo(ax, PAD.top + chartH);
       ctx.strokeStyle = '#FF6B2B'; ctx.lineWidth = 2;
       ctx.setLineDash([6, 4]); ctx.stroke(); ctx.setLineDash([]);
-      const aLabelW = 44, aLabelH = 20;
-      const aLabelX = ax + 6;
-      const aLabelY = PAD.top - 26;
-      ctx.fillStyle = '#FFF7ED';
-      ctx.beginPath(); ctx.roundRect(aLabelX, aLabelY, aLabelW, aLabelH, 4); ctx.fill();
-      ctx.fillStyle = '#FF6B2B'; ctx.font = 'bold 11px Noto Sans TC'; ctx.textAlign = 'center';
-      ctx.fillText('平均值', aLabelX + aLabelW / 2, aLabelY + 14);
+      const la = document.getElementById('label-mean');
+      la.style.left = (ax / dpr + 4) + 'px';
+      la.style.top = (PAD.top - 24) + 'px';
+      la.style.display = 'block';
     }
   }
 
