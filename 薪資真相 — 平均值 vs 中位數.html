@@ -1,0 +1,1324 @@
+<!DOCTYPE html>
+<!-- saved from url=(0047)file:///Users/jerrickhuang/Downloads/index.html -->
+<html lang="zh-TW"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>薪資真相 — 平均值 vs 中位數</title>
+<link href="./薪資真相 — 平均值 vs 中位數_files/css2" rel="stylesheet">
+<style>
+:root {
+  --green: #06C755;
+  --line-bg: #BBC8D4;
+  --orange: #FF6B2B;
+  --blue: #2563EB;
+  --blue-light: #DBEAFE;
+  --mid-blue: #1D4ED8;
+  --gray-50: #F9FAFB;
+  --gray-100: #F3F4F6;
+  --gray-200: #E5E7EB;
+  --gray-400: #9CA3AF;
+  --gray-600: #4B5563;
+  --gray-800: #1F2937;
+  --black: #0A0A0A;
+  --white: #FFFFFF;
+  --radius: 16px;
+  --shadow: 0 4px 24px rgba(0,0,0,0.08);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+body {
+  font-family: 'Noto Sans TC', sans-serif;
+  background: var(--gray-50);
+  color: var(--gray-800);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* ── SCREENS ── */
+.screen { display: none; min-height: 100vh; padding: 0; }
+.screen.active { display: flex; flex-direction: column; }
+
+/* ── NAV ── */
+.nav {
+  position: sticky; top: 0; z-index: 100;
+  background: var(--white);
+  border-bottom: 1px solid var(--gray-200);
+  padding: 12px 20px;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.nav-title { font-size: 14px; font-weight: 700; color: var(--gray-800); }
+.nav-steps { display: flex; gap: 6px; }
+.nav-dot {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: var(--gray-200); transition: background 0.3s;
+}
+.nav-dot.active { background: var(--blue); }
+.nav-dot.done { background: var(--gray-400); }
+
+/* ── CONTENT ── */
+.content { flex: 1; padding: 24px 20px 100px; max-width: 480px; margin: 0 auto; width: 100%; }
+
+/* ── FOOTER BTN ── */
+.footer {
+  position: fixed; bottom: 0; left: 0; right: 0;
+  padding: 16px 20px;
+  background: var(--white);
+  border-top: 1px solid var(--gray-200);
+  z-index: 100;
+}
+.btn-next {
+  width: 100%; padding: 16px;
+  background: var(--blue); color: var(--white);
+  border: none; border-radius: 14px;
+  font-family: 'Noto Sans TC', sans-serif;
+  font-size: 17px; font-weight: 700;
+  cursor: pointer; transition: transform 0.15s, opacity 0.15s;
+  -webkit-appearance: none;
+}
+.btn-next:active { transform: scale(0.97); opacity: 0.9; }
+.btn-next:disabled { background: var(--gray-200); color: var(--gray-400); cursor: not-allowed; }
+
+.btn-secondary {
+  width: 100%; padding: 14px;
+  background: transparent; color: var(--blue);
+  border: 2px solid var(--blue); border-radius: 14px;
+  font-family: 'Noto Sans TC', sans-serif;
+  font-size: 16px; font-weight: 700;
+  cursor: pointer; margin-top: 10px;
+  -webkit-appearance: none;
+}
+
+/* ── CARDS ── */
+.card {
+  background: var(--white);
+  border-radius: var(--radius);
+  padding: 20px;
+  box-shadow: var(--shadow);
+  margin-bottom: 16px;
+}
+
+/* ── TYPOGRAPHY ── */
+.h1 { font-size: 26px; font-weight: 900; line-height: 1.3; color: var(--black); }
+.h2 { font-size: 20px; font-weight: 700; line-height: 1.4; color: var(--black); }
+.body { font-size: 15px; font-weight: 400; line-height: 1.7; color: var(--gray-600); }
+.caption { font-size: 12px; font-weight: 400; color: var(--gray-400); line-height: 1.6; }
+.highlight { color: var(--blue); font-weight: 700; }
+.highlight-orange { color: var(--orange); font-weight: 700; }
+
+/* ── BADGE ── */
+.badge {
+  display: inline-block; padding: 4px 12px;
+  border-radius: 20px; font-size: 12px; font-weight: 700;
+  margin-bottom: 12px;
+}
+.badge-blue { background: var(--blue-light); color: var(--mid-blue); }
+.badge-orange { background: #FEE2D5; color: #C2410C; }
+
+/* ══════════════════════════════════
+   SCREEN 0 — QR CODE
+══════════════════════════════════ */
+#screen-qr {
+  background: var(--white);
+  align-items: center; justify-content: center;
+  text-align: center; padding: 40px 20px;
+}
+#screen-qr .qr-wrap { display: flex; flex-direction: column; align-items: center; gap: 20px; }
+#screen-qr canvas { border-radius: 12px; box-shadow: var(--shadow); }
+#screen-qr .qr-title { font-size: 28px; font-weight: 900; color: var(--black); }
+#screen-qr .qr-sub { font-size: 15px; color: var(--gray-600); }
+#screen-qr .qr-url { font-size: 13px; color: var(--gray-400); font-weight: 500; }
+
+/* ══════════════════════════════════
+   SCREEN 1 — QUIZ
+══════════════════════════════════ */
+.quiz-options { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 20px; }
+.quiz-option {
+  padding: 20px 12px; border-radius: 14px;
+  border: 2px solid var(--gray-200);
+  background: var(--white);
+  text-align: center; cursor: pointer;
+  transition: all 0.2s; -webkit-appearance: none;
+  font-family: 'Noto Sans TC', sans-serif;
+}
+.quiz-option .opt-label { font-size: 13px; font-weight: 500; color: var(--gray-400); display: block; margin-bottom: 4px; }
+.quiz-option .opt-value { font-size: 20px; font-weight: 700; color: var(--gray-800); display: block; }
+.quiz-option:active { transform: scale(0.97); }
+.quiz-option.selected { border-color: var(--blue); background: var(--blue-light); }
+.quiz-option.selected .opt-label { color: var(--mid-blue); }
+.quiz-option.selected .opt-value { color: var(--mid-blue); }
+.quiz-option.correct { border-color: #16A34A; background: #DCFCE7; animation: correct-pulse 0.5s ease; }
+.quiz-option.correct .opt-label, .quiz-option.correct .opt-value { color: #15803D; }
+.quiz-option.wrong { border-color: #DC2626; background: #FEE2E2; opacity: 0.6; }
+@keyframes correct-pulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.04)} }
+
+.reveal-box {
+  background: var(--gray-100); border-radius: 14px;
+  padding: 20px; margin-top: 20px;
+  opacity: 0; transform: translateY(10px);
+  transition: all 0.5s ease;
+}
+.reveal-box.show { opacity: 1; transform: translateY(0); }
+.stat-number { font-size: 42px; font-weight: 900; color: var(--blue); line-height: 1; }
+.stat-label { font-size: 14px; color: var(--gray-600); margin-top: 4px; }
+
+/* ══════════════════════════════════
+   SCREEN 2 — SLIDER
+══════════════════════════════════ */
+.people-row {
+  display: flex; flex-wrap: wrap; gap: 8px;
+  justify-content: center; margin: 20px 0;
+}
+.person-card {
+  display: flex; flex-direction: column; align-items: center;
+  gap: 4px; width: calc(20% - 8px); min-width: 52px;
+}
+.person-avatar {
+  width: 44px; height: 44px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 20px; transition: all 0.3s ease;
+  position: relative; overflow: hidden;
+}
+.person-avatar svg { width: 28px; height: 28px; }
+.person-salary { font-size: 11px; font-weight: 700; text-align: center; transition: color 0.3s; }
+.person-card.mystery .person-avatar { background: var(--gray-100); border: 2px dashed var(--gray-400); }
+.person-card.mystery .person-salary { color: var(--gray-400); }
+
+/* Person colors */
+.person-avatar.normal { background: #E0F2FE; }
+.person-avatar.suit { background: #EDE9FE; }
+.person-avatar.rich { background: #FEF9C3; }
+.person-avatar.vip { background: #FEE2D5; }
+.person-avatar.boss { background: #FCE7F3; }
+
+.stats-row {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 12px; margin: 16px 0;
+}
+.stat-box {
+  border-radius: 12px; padding: 14px 16px;
+  transition: all 0.2s;
+}
+.stat-box.blue-box { background: var(--blue-light); }
+.stat-box.orange-box { background: #FFF7ED; }
+.stat-box .sb-label { font-size: 11px; font-weight: 700; margin-bottom: 4px; }
+.stat-box.blue-box .sb-label { color: var(--mid-blue); }
+.stat-box.orange-box .sb-label { color: #C2410C; }
+.stat-box .sb-value { font-size: 22px; font-weight: 900; line-height: 1; }
+.stat-box.blue-box .sb-value { color: var(--mid-blue); }
+.stat-box.orange-box .sb-value { color: #C2410C; }
+
+.slider-wrap { margin: 16px 0; }
+.slider-label-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+.slider-current { font-size: 22px; font-weight: 900; color: var(--orange); }
+input[type=range] {
+  -webkit-appearance: none; appearance: none;
+  width: 100%; height: 8px;
+  border-radius: 4px; background: var(--gray-200);
+  outline: none; cursor: pointer;
+}
+input[type=range]::-webkit-slider-thumb {
+  -webkit-appearance: none; appearance: none;
+  width: 28px; height: 28px; border-radius: 50%;
+  background: var(--orange); cursor: pointer;
+  box-shadow: 0 2px 8px rgba(255,107,43,0.4);
+  transition: transform 0.1s;
+}
+input[type=range]::-webkit-slider-thumb:active { transform: scale(1.2); }
+input[type=range]::-moz-range-thumb {
+  width: 28px; height: 28px; border-radius: 50%;
+  background: var(--orange); cursor: pointer; border: none;
+  box-shadow: 0 2px 8px rgba(255,107,43,0.4);
+}
+
+.comment-box {
+  background: var(--gray-100); border-radius: 12px;
+  padding: 12px 16px; margin-top: 12px;
+  min-height: 48px; transition: all 0.3s;
+}
+.comment-text { font-size: 14px; font-weight: 500; color: var(--gray-600); line-height: 1.5; }
+
+.note-box {
+  background: var(--gray-50); border: 1px solid var(--gray-200);
+  border-radius: 10px; padding: 10px 14px; margin-top: 16px;
+}
+.note-text { font-size: 11px; color: var(--gray-400); line-height: 1.6; }
+
+/* ══════════════════════════════════
+   SCREEN 3 — CHART
+══════════════════════════════════ */
+.chart-container { position: relative; width: 100%; height: 220px; margin: 16px 0; }
+#salary-chart { width: 100%; height: 100%; }
+
+.chart-legend { display: flex; gap: 16px; margin-bottom: 12px; flex-wrap: wrap; }
+.legend-item { display: flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 500; }
+.legend-line { width: 20px; height: 3px; border-radius: 2px; }
+.legend-line.solid { background: var(--blue); }
+.legend-line.dashed { background: var(--orange); border-top: 3px dashed var(--orange); height: 0; }
+
+.chart-text-reveal {
+  opacity: 0; transform: translateY(8px);
+  transition: all 0.6s ease; margin-bottom: 12px;
+}
+.chart-text-reveal.show { opacity: 1; transform: translateY(0); }
+
+.fill-stat {
+  background: var(--blue-light); border-radius: 12px;
+  padding: 14px 16px; margin: 12px 0;
+  opacity: 0; transform: translateY(8px);
+  transition: all 0.6s ease;
+}
+.fill-stat.show { opacity: 1; transform: translateY(0); }
+.fill-stat-number { font-size: 32px; font-weight: 900; color: var(--mid-blue); }
+.fill-stat-label { font-size: 14px; color: var(--mid-blue); font-weight: 500; }
+
+/* ══════════════════════════════════
+   SCREEN 4 — FLIP CARDS
+══════════════════════════════════ */
+.line-mock {
+  border-radius: 16px; overflow: hidden;
+  box-shadow: var(--shadow); margin-bottom: 20px;
+  background: var(--white);
+}
+.line-header {
+  background: var(--green); padding: 12px 16px;
+  display: flex; align-items: center; gap: 10px;
+}
+.line-back { color: white; font-size: 20px; font-weight: 300; opacity: 0.9; }
+.line-avatar {
+  width: 32px; height: 32px; border-radius: 50%;
+  background: white; display: flex; align-items: center;
+  justify-content: center; font-size: 14px; font-weight: 700; color: var(--green);
+  flex-shrink: 0;
+}
+.line-name { color: white; font-size: 15px; font-weight: 700; flex: 1; }
+.line-icons { display: flex; gap: 14px; color: white; font-size: 18px; opacity: 0.9; }
+.line-body { background: #EAF0F7; padding: 16px; min-height: 80px; }
+.line-bubble {
+  background: white; border-radius: 0 12px 12px 12px;
+  padding: 12px 14px; max-width: 85%; display: inline-block;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+}
+.line-bubble p { font-size: 14px; line-height: 1.6; color: var(--gray-800); }
+.line-time { font-size: 11px; color: #8A9BB0; margin-top: 6px; display: block; }
+
+.flip-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; margin: 16px 0; }
+.flip-card { perspective: 600px; cursor: pointer; }
+.flip-card-inner {
+  position: relative; width: 100%; padding-bottom: 110%;
+  transform-style: preserve-3d;
+  transition: transform 0.45s cubic-bezier(0.4,0,0.2,1);
+  -webkit-transform-style: preserve-3d;
+}
+.flip-card.flipped .flip-card-inner { transform: rotateY(180deg); }
+.flip-front, .flip-back {
+  position: absolute; inset: 0;
+  backface-visibility: hidden; -webkit-backface-visibility: hidden;
+  border-radius: 10px; display: flex; flex-direction: column;
+  align-items: center; justify-content: center; padding: 6px 4px;
+}
+.flip-front { background: var(--blue); }
+.flip-back { background: var(--white); border: 2px solid var(--gray-200); transform: rotateY(180deg); }
+.flip-front .card-num { font-size: 13px; font-weight: 700; color: rgba(255,255,255,0.7); }
+.flip-front .card-q { font-size: 22px; font-weight: 900; color: white; }
+.flip-back .card-num { font-size: 10px; font-weight: 500; color: var(--gray-400); margin-bottom: 2px; }
+.flip-back .card-salary { font-size: 12px; font-weight: 700; color: var(--gray-800); text-align: center; line-height: 1.3; }
+.flip-card.mystery-card .flip-front { background: var(--gray-200); border: 2px dashed var(--gray-400); }
+.flip-card.mystery-card .flip-front .card-q { color: var(--gray-500); font-size: 26px; }
+.flip-card.boss-reveal .flip-back { background: #FEF9C3; border-color: #EAB308; }
+.flip-card.boss-reveal .flip-back .card-salary { color: #92400E; font-size: 11px; }
+
+.guess-wrap { margin: 16px 0; }
+.guess-input-row { display: flex; gap: 10px; align-items: center; }
+.guess-input {
+  flex: 1; padding: 14px 16px;
+  border: 2px solid var(--gray-200); border-radius: 12px;
+  font-family: 'Noto Sans TC', sans-serif;
+  font-size: 18px; font-weight: 700;
+  color: var(--gray-800); background: var(--white);
+  -webkit-appearance: none; outline: none;
+  transition: border-color 0.2s;
+}
+.guess-input:focus { border-color: var(--blue); }
+.guess-submit {
+  padding: 14px 20px; background: var(--blue); color: white;
+  border: none; border-radius: 12px;
+  font-family: 'Noto Sans TC', sans-serif;
+  font-size: 15px; font-weight: 700; cursor: pointer;
+  white-space: nowrap; -webkit-appearance: none;
+  transition: transform 0.15s;
+}
+.guess-submit:active { transform: scale(0.96); }
+.guess-result {
+  margin-top: 12px; padding: 14px 16px;
+  background: var(--gray-100); border-radius: 12px;
+  opacity: 0; transition: opacity 0.4s;
+}
+.guess-result.show { opacity: 1; }
+
+.choice-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 16px 0; }
+.choice-btn {
+  padding: 20px 12px; border-radius: 14px;
+  border: 2px solid var(--gray-200); background: var(--white);
+  text-align: center; cursor: default;
+}
+.choice-btn .choice-label { font-size: 12px; color: var(--gray-400); font-weight: 500; display: block; margin-bottom: 6px; }
+.choice-btn .choice-value { font-size: 18px; font-weight: 700; color: var(--gray-800); display: block; margin-bottom: 4px; }
+.choice-btn .choice-desc { font-size: 12px; color: var(--gray-500); display: block; }
+
+/* ══════════════════════════════════
+   SCREEN 5 — PERCENTILE
+══════════════════════════════════ */
+.pct-input-wrap { margin: 20px 0; }
+.pct-input-label { font-size: 14px; font-weight: 500; color: var(--gray-600); margin-bottom: 8px; display: block; }
+.pct-input-row { display: flex; gap: 10px; }
+.pct-input {
+  flex: 1; padding: 16px;
+  border: 2px solid var(--gray-200); border-radius: 12px;
+  font-family: 'Noto Sans TC', sans-serif;
+  font-size: 20px; font-weight: 700; color: var(--gray-800);
+  -webkit-appearance: none; outline: none; transition: border-color 0.2s;
+}
+.pct-input:focus { border-color: var(--blue); }
+.pct-btn {
+  padding: 16px 20px; background: var(--blue); color: white;
+  border: none; border-radius: 12px;
+  font-family: 'Noto Sans TC', sans-serif;
+  font-size: 15px; font-weight: 700; cursor: pointer;
+  -webkit-appearance: none; transition: transform 0.15s;
+}
+.pct-btn:active { transform: scale(0.96); }
+
+.pct-result-wrap { opacity: 0; transition: opacity 0.5s; }
+.pct-result-wrap.show { opacity: 1; }
+
+.progress-bar-wrap { margin: 16px 0; }
+.progress-bar-bg {
+  width: 100%; height: 20px; background: var(--gray-200);
+  border-radius: 10px; overflow: hidden;
+}
+.progress-bar-fill {
+  height: 100%; background: linear-gradient(90deg, var(--blue), #60A5FA);
+  border-radius: 10px; width: 0%;
+  transition: width 1.2s cubic-bezier(0.4,0,0.2,1);
+}
+.pct-number { font-size: 56px; font-weight: 900; color: var(--blue); line-height: 1; margin: 12px 0 4px; }
+.pct-sublabel { font-size: 14px; color: var(--gray-600); }
+.pct-comment {
+  background: var(--gray-100); border-radius: 14px;
+  padding: 16px; margin-top: 16px;
+  font-size: 15px; font-weight: 500; color: var(--gray-700);
+  line-height: 1.6;
+}
+
+/* ══════════════════════════════════
+   SCREEN 6 — FINALE
+══════════════════════════════════ */
+#screen-6 { background: var(--black); justify-content: center; align-items: center; padding: 40px 28px; text-align: center; }
+.finale-line1 {
+  font-size: 20px; font-weight: 400; color: #9CA3AF;
+  line-height: 1.6; margin-bottom: 32px;
+  opacity: 0; animation: fadeUp 1s ease 0.5s forwards;
+}
+.finale-line2 {
+  font-size: 24px; font-weight: 700; color: var(--white);
+  line-height: 1.5;
+  opacity: 0; animation: fadeUp 1.5s ease 2.5s forwards;
+  padding: 24px 0 0;
+  border-top: 1px solid #374151;
+}
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ══════════════════════════════════
+   UTILITY
+══════════════════════════════════ */
+.mt8 { margin-top: 8px; }
+.mt12 { margin-top: 12px; }
+.mt16 { margin-top: 16px; }
+.mt20 { margin-top: 20px; }
+.mb8 { margin-bottom: 8px; }
+.text-center { text-align: center; }
+.divider { height: 1px; background: var(--gray-200); margin: 16px 0; }
+</style>
+</head>
+<body>
+
+<!-- ══ QR CODE SCREEN ══ -->
+<div id="screen-qr" class="screen active">
+  <div class="qr-wrap">
+    <div class="qr-title">📊 薪資真相</div>
+    <canvas id="qr-canvas" width="240" height="240" title="file:///Users/jerrickhuang/Downloads/"><canvas width="240" height="240" style="display: none;"></canvas><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAPAAAADwCAYAAAA+VemSAAAP/0lEQVR4Aeyd3W4buRKEjVwm7/+ovt7dsq3FRGK1hq0eipz5Fqdtpcj+4ccUDDDIya/fv3//s1r8Y/4bdQ7T/kuunOGroPmS6WNKhfc/Ksedx/WPdFdLusvT2orx64P/IACBZQlg4GWvjsEh8PGBgfldAIGFCVzZwAtfG6ND4JsABv7mwFcILEnAGvjz8/PjnTEzzT9//ny4cMwy53E9pGf6KK8V0Wyt/dIyOW5m6a6eevWG6rlwfSLd1RqlR7NZA0dJrEEAAnMQwMBz3MPoKeh3EgIY+CQXyTGuSQADX/PeOfVJCGDgk1wkx7gmgW4D974IPts/Crt7MYz6u5xIj+q5NVfP7Y90V0t6lOfWlFcVrod010NrLjI5Hx8frly3/uz3du969wD/JXQb+L8c/gcBCExCAANPchGMAYEMAQycoUYOBCYhgIEnuQjGgECGQKeBMy3IgQAEjiKAgY8iS10IDCBwKgO7P1aQnmHp/hggU0szuHB93H7pLieaTXm94fqM0qPzuBminLOtncrAZ7sczgOBZwQw8DNC/6/zAQLzEcDA890JE0FgNwEMvBsVGyEwHwEMPN+dMBEEdhO4jIHdi2Xvq6z2u1qRHt2IarYiWy/q1Vp73ucxqzXvTXvc/a3c1nu+f2e2v7o67d3nVC9j4HNeH6e6OgEMfPXfAZx/aQIYeOnrY/irE8DAV/8dwPmfEJh7GQPPfT9MB4GQAAYO8bAIgbkJdBvYPd1n9Uo80R+HuPminFGzVfaprvVubq6/9Oju3FolH81QGZnZug2caUIOBCBwDIFjDXzMzFSFAAR+CGDgHxB8g8CKBDDwirfGzBD4IYCBf0DwDQIrErAGdq94o/QVYWrm/18lPz8/tp+1Vhnb2tvP0f1U9o9qbefZfs7MFuVsa28/R7Nl1qIZRqxFM1sDR0msQQACcxDAwHPcA1NAIEUAA6ewkQSBOQhg4Dnu4VxTcJphBDDwMNQ0gkA9AQxcz5SKEBhG4Nf2+X2Vz5V0ojOP6uP+KCIzW5Tj+kTnzOS4etFsLmeUHs028xo/gUf9DqHPNQgMPiUGHgycdhCoJICBK2lSCwKDCWDgwcBpB4FKAhi4kia1IDCYQLeB3atkVt+ed/s5qrfd9+rnqI9be7Xnfb575bzft/21my3SM31cTqS7Gbbz7/0c9XE1ohw3W0Z3/SM90yfK6TZwNBxrEIDAWAIYeCxvukGglAAGLsVJMQiMJYCBx/K23ViAQIYABs5QIwcCkxDAwJNcBGNAIEPgl3uidsWiJ3q35mpJd/1dLenKqwrVc+F6uP3S3XkyuusvXb16Q3mtiOpk5nb1MrWqc9xsLS43LZPj5na1pN/63X/Xmgt+At/T4tfDCdAwTwAD59mRCYG3E8DAb78CBoBAngAGzrMjEwJvJ4CB334FDHBlAq+e3RrYvaJlGroXNOmunusf6a6WdJentcrQmarCzRzp0VlcXpSTWRvVJ8M5M5vLiXQ3WyVP9bcGzjQiBwIQGEsAA4/lTTcIlBLAwKU4KQaBsQRWNvBYUnSDwIQEMPCEl8JIENhLAAPvJcU+CExIoPtfZojOoGft3nDP7Rk9ms2tRfO6GVytSI/6RHmVa+48mdlcLemZmZXXikytzHkyfapzWueXFvXhJ3BEZ941JoPAFwEM/IWBLxBYkwAGXvPemBoCXwQw8BcGvkBgTQIYeM17u/LUnH1DwP5f6riXvE3uw0e9mLXiYeNGcH0ifZO++2NrrmeaK56ZLerl+mT0aDa3lukzc07E2q1F58nkONaR7mZw/aXzE9hRQ4fAAgQw8AKXxIgQcAQwsCODDoH5CDxMhIEfkCBAYB0CGHidu2JSCDwQwMAPSBAgsA6B7r/MUP0Mrqfw3nAzRNhdTqS7etG8LmdUn2g2t+Zmlp7JUV4rXC3pjk+rzjPN1Yp0zeDC5bn9Wd31ic57oZ/AEQbWILAmAQy85r0xNQS+CGDgLwx8gcCaBDDwmvfG1BD4IoCBvzCc/QvnOyuB0r/M4CC517Ws7vpEeuZlMDOfmyHq73Ki/q6eqzVSz8zmciLd8Yly3FrEx+W4/lndzRDV4yewo4YOgQUIYOAFLokRIeAIYGBHBv0kBM59DAx87vvldCcngIFPfsEc79wEMPC575fTnZxA919mcE/q0t1zt9ZcOL5uf6S7WtV6ZgbHJtKjuaM8t+bqRefpraUemRzltcLVkt7aL01rLrTeG5laEVO31juX9sc/gbWDgAAEpiWAgae9GgaDwHMCGPg5I3ZAYFoCGHjaq2EwCDwngIEdI3QILEBgiIHdK5509yKntd6IePfW0n5XT2suXI47Z7Xu+kt3M0e6m686x9XT3JXh+kS6YxDNFdVza1E9tzbEwK45OgQg8BoBDPwaP7Ih8FYCGPit+CdtzljLEMDAy1wVg0LgkQAGfmSCAoFlCGDgZa6KQSHwSKDbwO4JXPpj+W/FPcNLV14rtObiu2rNV9dDeqZD6yzSMrUyOZq7NzJ9ohydtxVRTu/M0f6X+nx+ftzXbp1F2v2+7a/dDNs9FZ+7DewGQ4cABMYTwMDjmdMRAmUEMHAZSgpBYDwBDDyeOR0hUEag1MBlU1EIAhDYRaD7X2aIXs5cR73YuXD13H7pLsf1r9Zd/0ivnkEcesPNEM3tekQ5bs31l+76ZHTXX3qmnuZrRVSrtV9alJNZ4yewqBIQWJQABl704hgbAiKAgUWhICgBgXcQwMDvoE5PCBQRwMBFICkDgXcQwMDvoE5PCBQR6P6XGaKnbjeTnu9duHpuv3SX4/pLV14rtOaitV+a6y/d1croqueiut4rffbOIna9EdV2taIct+ZqSXc5ka683ojquTV+Ajsy6BBYgAAGXuCSGBECjgAGdmTQIbAAAQy8wCUx4rwE3j0ZBn73DdAfAi8Q6DZw78ua9mfmc6+i0ivrZWplcjR3b4hdZWTmdjnRWVxOpLt61TmOp+sv3eVEs7k11XPhciK928BRMdYgAIGxBDDwWN50g0ApgXcauPQgFIPAFQlg4CveOmc+DQEMfJqr5CBXJICBr3jrnPk0BIYY2D2bS3ck3dN9ta4ZXLjZCvS/Srgzubmk/1Vg5y9cn4wetdR8rYhy3Fr1bJk+rbNIi2bL9InqubUhBnaHQYcABF4jgIFf40c2BN5KAAO/FT/NIfAaAQz8Gj+y+wmQUUgAAxfCpBQERhOw/zJD5SDuBS3S9cpXGZnzuP6ZWtFZM/UyOe48ke76ROdxa65WpEezVa5FM1SeJ+qTOQ8/gSOirEFgcgIYePILYrxTESg/DAYuR0pBCIwjgIHHsaYTBMoJYOBypBSEwDgCGHgcazpBoJxAqYEzz+DuRI9P958fN60yx9WSfut3/11rLjIMXM593+2vXU6kb/O3n91ZpEf13JryWuH2S2/tl7adc+9n5blwNdx+6ZqvN5RXFW5m6aUGrhqYOhCAwD4CGHgfJ3ZBYEoCGHjKa2EoCOwjgIH3cXrzLtpDoE0AA7e5oEJgCQLWwO7VLTqVXsV6w/WJdNcjynFr0Xncmusf6a5WVo96uTXHwO2X7ubTmguXE+mulptZelTPrSmvFW6/dDeb1ly0ejzTXK1ItwaOkliDAATmIICB57gHprAEWIgIYOCIDmsQmJwABp78ghgPAhEBDBzRYQ0CkxPAwJNfEONdmcDzs1sDu6fzZ0/hrfVoDNcn0ls9pEU5bi2aza2pV2+4/tIzfUblaL5WuP6R3qpz01zebb313d1Ba+8zzdWSnpntWb+edddfujWwFgkIQGBuAhh47vthOgiEBDBwiIdFCMxN4LwGnps700GghAAGLsFIEQi8h0C3gXtez2579ZLnwh3b7Zd+q3v/XWu94fpLd7W01huulnRX6/58218rrxXbPXs/u/7SWz2kac2F1nsjU6syJ2LVe5Zov5tZepTn1roNrEYEBCAwBwEMPMc91E5BtcsQwMCXuWoOekYCGPiMt8qZLkMAA1/mqjnoGQlg4DPe6pXPdLGzdxvYPWdLr2SXedaPcjKzRfXcWqaPyxFTF5kcV8udJdJdLelutqiey8no1X2ier1r1efpNnBmAHIgAIFjCGDgY7hSFQJDCGDgIZhpAoFjCPxl4GNaUBUCEDiKAAY+iix1ITCAQLeBo1e3ynn1munC9XH7pbu5Xa1q3fXP6m6+TD1Xq1rXPfRGZobeHkfsd3NHvdzduVrSuw2sJAICEJiDAAb+uQe+QWBFAhh4xVtjZgj8EMDAPyD4BoEVCWDgFW+NmSHwQwAD/4C48jfOvi6BX5mn697juh7SXS2t9YarFelRD/fkH9XLrLk+ke76RDluzdWSnslRXisi1m6tVecVzfXJ6NEcldyiPvwEjuiwBoHJCWDgyS+I8SAQEcDAER3WTk9g9QNi4NVvkPkvTQADX/r6OfzqBH6517KZdQc9ekl053G1pLt6WnPhclx/6b21XI+srhlcuJpuZukux/WIdFdLunpVRTRDpofm641oBrfGT+DM7ZADgUkIvGLgSY7AGBC4LgEMfN275+QnIICBT3CJHOG6BDDwde+ek5+AAAbOXSJZEJiCgDVw7xN49f4Z6Lin+2g2l5Ph42pJdzNozYXLiWbrreV6SI/6uDXXX7rLUa/ecLWk99aq3q8ZXFgDVw9BPQhAoJ4ABq5nSkUIDCOAgYehPk0jDjIRAQw80WUwCgR6CWDgXmLsh8BEBLoNrNe/yqhkEc3l+kQ57uUvk+P6S3f1tObC5biZpffWUg/l9YbyWuH6S2/tl6Y1F1pvhdsvvbU/q6mei0xNxzmq1W1gNzA6BC5AYLojYuDproSBILCfAAbez4qdEJiOAAae7koYCAL7CWDg/azYCYHpCAw08HRnZyAILE8AA098he6PFaRnxnZ/HKF6LlxO1L+3lnq4eq5WpLta0l2e1lxkcnprqUcmBwM7augQWIAABl7gkhgRAo4ABnZkSnWKQeAYAhj4GK5UhcAQAhh4CGaaQOAYApc3sF7/XOh1tBXRVbT2S4ty3JryXLiZXa1Idz2kuz5ac+F6uVrSXY7rId3lZHTN4EK9WuH2R3qrzk1zc9/WW98vb2AHDb2KAHWOJICBj6RLbQgcTAADHwyY8hA4kgAGPpIutSFwMAEMfDBgyl+ZwPFnx8DHM6YDBA4j0G3g6Ik8s1Z5sqi/69N6mr9prp6rJT2To7xWuFrSbzPef2/VuWnKa8Vt/ejv97Nuf92a65mWmXfbc+/nyj7RmTJ9ug2caUIOBCBwDAEMfAxXqkJgCIF5DTzk+DSBwNoEMPDa98f0FyeAgS/+G4Djr03AGnjvC91R+6qxute/qI87W5RTueb6S3fn0VpvuFrSK88T1eqdWftdPc3twuVEemUtzd0b0WzWwFESawcToDwEdhLAwDtBsQ0CMxLAwDPeCjNBYCcBDLwTFNsgMCMBDDzjrVx5Js7eRQADd+FiMwTmIvAvAAAA//8rPGLwAAAABklEQVQDALw6lAIzGdQ4AAAAAElFTkSuQmCC" style="display: block;"></canvas>
+    <div class="qr-sub">用手機掃描 QR Code<br>一起參與互動 Demo</div>
+    <div class="qr-url" id="qr-url-text">file:///Users/jerrickhuang/Downloads/</div>
+    <button class="btn-next" style="width:240px;margin-top:8px" onclick="startDemo()">▶ 開始報告</button>
+  </div>
+</div>
+
+<!-- ══ SCREEN 1 — QUIZ ══ -->
+<div id="screen-1" class="screen">
+  <div class="nav">
+    <span class="nav-title">環節一：你猜猜看</span>
+    <div class="nav-steps">
+      <div class="nav-dot active" id="dot-1"></div>
+      <div class="nav-dot" id="dot-2"></div>
+      <div class="nav-dot" id="dot-3"></div>
+      <div class="nav-dot" id="dot-4"></div>
+      <div class="nav-dot" id="dot-5"></div>
+    </div>
+  </div>
+  <div class="content">
+    <div class="badge badge-blue">環節一</div>
+    <p class="h2">根據主計處於 2025 年 2 月 17 日，最新發布台灣 2024 年上班族平均月薪數值，您認為是多少？</p>
+    <p class="body mt12">憑感覺猜，台灣上班族平均月薪，ABCD 哪個？</p>
+    <div class="quiz-options">
+      <button class="quiz-option" onclick="selectOption(this,&#39;A&#39;)" id="opt-A">
+        <span class="opt-label">A</span>
+        <span class="opt-value">3 萬多</span>
+      </button>
+      <button class="quiz-option" onclick="selectOption(this,&#39;B&#39;)" id="opt-B">
+        <span class="opt-label">B</span>
+        <span class="opt-value">4 萬多</span>
+      </button>
+      <button class="quiz-option" onclick="selectOption(this,&#39;C&#39;)" id="opt-C">
+        <span class="opt-label">C</span>
+        <span class="opt-value">5 萬多</span>
+      </button>
+      <button class="quiz-option" onclick="selectOption(this,&#39;D&#39;)" id="opt-D">
+        <span class="opt-label">D</span>
+        <span class="opt-value">6 萬多</span>
+      </button>
+    </div>
+    <div class="reveal-box" id="quiz-reveal">
+      <div class="text-center">
+        <div class="stat-number">60,984 元</div>
+        <div class="stat-label mt8">2024 年全體受僱員工每人每月總薪資平均數</div>
+      </div>
+      <div class="divider"></div>
+      <p class="body">請問在座各位，<strong>有幾個人的月薪超過 6 萬 1？</strong></p>
+      <div class="mt12" style="background:#FEF9C3;border-radius:10px;padding:12px 14px;">
+        <p class="body" style="color:#92400E;">根據主計處資料，將近 <strong>7 成</strong>的台灣上班族，月薪低於這個平均值。</p>
+      </div>
+      <p class="body mt12">問題不在你，在這個數字<strong>怎麼算出來的</strong>。</p>
+    </div>
+  </div>
+  <div class="footer">
+    <button class="btn-next" id="btn-1" onclick="goTo(2)" disabled="">揭曉答案</button>
+  </div>
+</div>
+
+<!-- ══ SCREEN 2 — SLIDER ══ -->
+<div id="screen-2" class="screen">
+  <div class="nav">
+    <span class="nav-title">環節二：離群值炸彈</span>
+    <div class="nav-steps">
+      <div class="nav-dot done" id="dot2-1"></div>
+      <div class="nav-dot active" id="dot2-2"></div>
+      <div class="nav-dot" id="dot2-3"></div>
+      <div class="nav-dot" id="dot2-4"></div>
+      <div class="nav-dot" id="dot2-5"></div>
+    </div>
+  </div>
+  <div class="content">
+    <div class="badge badge-orange">環節二</div>
+    <p class="h2">拉動滑桿，看平均值如何被一個人拉爆</p>
+    <p class="body mt8">前 9 人薪資固定，第 10 人由你決定。</p>
+
+    <div class="people-row" id="people-row"><div class="person-card">
+      <div class="person-avatar normal" id="av-0"><svg viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="14" cy="9" r="5" fill="#60A5FA"></circle>
+    <path d="M4 26c0-5.523 4.477-10 10-10s10 4.477 10 10" stroke="#2563EB" stroke-width="2" stroke-linecap="round"></path>
+  </svg></div>
+      <div class="person-salary" id="sal-0">28K</div>
+    </div><div class="person-card">
+      <div class="person-avatar normal" id="av-1"><svg viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="14" cy="9" r="5" fill="#60A5FA"></circle>
+    <path d="M4 26c0-5.523 4.477-10 10-10s10 4.477 10 10" stroke="#2563EB" stroke-width="2" stroke-linecap="round"></path>
+  </svg></div>
+      <div class="person-salary" id="sal-1">30K</div>
+    </div><div class="person-card">
+      <div class="person-avatar normal" id="av-2"><svg viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="14" cy="9" r="5" fill="#60A5FA"></circle>
+    <path d="M4 26c0-5.523 4.477-10 10-10s10 4.477 10 10" stroke="#2563EB" stroke-width="2" stroke-linecap="round"></path>
+  </svg></div>
+      <div class="person-salary" id="sal-2">31K</div>
+    </div><div class="person-card">
+      <div class="person-avatar normal" id="av-3"><svg viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="14" cy="9" r="5" fill="#60A5FA"></circle>
+    <path d="M4 26c0-5.523 4.477-10 10-10s10 4.477 10 10" stroke="#2563EB" stroke-width="2" stroke-linecap="round"></path>
+  </svg></div>
+      <div class="person-salary" id="sal-3">32K</div>
+    </div><div class="person-card">
+      <div class="person-avatar normal" id="av-4"><svg viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="14" cy="9" r="5" fill="#60A5FA"></circle>
+    <path d="M4 26c0-5.523 4.477-10 10-10s10 4.477 10 10" stroke="#2563EB" stroke-width="2" stroke-linecap="round"></path>
+  </svg></div>
+      <div class="person-salary" id="sal-4">33K</div>
+    </div><div class="person-card">
+      <div class="person-avatar normal" id="av-5"><svg viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="14" cy="9" r="5" fill="#60A5FA"></circle>
+    <path d="M4 26c0-5.523 4.477-10 10-10s10 4.477 10 10" stroke="#2563EB" stroke-width="2" stroke-linecap="round"></path>
+  </svg></div>
+      <div class="person-salary" id="sal-5">35K</div>
+    </div><div class="person-card">
+      <div class="person-avatar normal" id="av-6"><svg viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="14" cy="9" r="5" fill="#60A5FA"></circle>
+    <path d="M4 26c0-5.523 4.477-10 10-10s10 4.477 10 10" stroke="#2563EB" stroke-width="2" stroke-linecap="round"></path>
+  </svg></div>
+      <div class="person-salary" id="sal-6">38K</div>
+    </div><div class="person-card">
+      <div class="person-avatar normal" id="av-7"><svg viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="14" cy="9" r="5" fill="#60A5FA"></circle>
+    <path d="M4 26c0-5.523 4.477-10 10-10s10 4.477 10 10" stroke="#2563EB" stroke-width="2" stroke-linecap="round"></path>
+  </svg></div>
+      <div class="person-salary" id="sal-7">40K</div>
+    </div><div class="person-card">
+      <div class="person-avatar normal" id="av-8"><svg viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="14" cy="9" r="5" fill="#60A5FA"></circle>
+    <path d="M4 26c0-5.523 4.477-10 10-10s10 4.477 10 10" stroke="#2563EB" stroke-width="2" stroke-linecap="round"></path>
+  </svg></div>
+      <div class="person-salary" id="sal-8">45K</div>
+    </div><div class="person-card mystery">
+    <div class="person-avatar normal" id="av-9"><svg viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="14" cy="9" r="5" fill="#60A5FA"></circle>
+    <path d="M4 26c0-5.523 4.477-10 10-10s10 4.477 10 10" stroke="#2563EB" stroke-width="2" stroke-linecap="round"></path>
+  </svg></div>
+    <div class="person-salary" id="sal-9" style="color: var(--gray-800);">30K</div>
+  </div></div>
+
+    <div class="stats-row">
+      <div class="stat-box blue-box">
+        <div class="sb-label">📊 中位數</div>
+        <div class="sb-value" id="stat-median">32,500</div>
+        <div class="caption mt8" style="color:var(--mid-blue)">幾乎不動</div>
+      </div>
+      <div class="stat-box orange-box">
+        <div class="sb-label">📈 平均值</div>
+        <div class="sb-value" id="stat-mean">34,200</div>
+        <div class="caption mt8" style="color:#C2410C">隨第10人起舞</div>
+      </div>
+    </div>
+
+    <div class="slider-wrap">
+      <div class="slider-label-row">
+        <span class="caption">第 10 人月薪</span>
+        <span class="slider-current" id="slider-val">30,000</span>
+      </div>
+      <input type="range" id="salary-slider" min="30000" max="5000000" step="10000" value="30000" oninput="updateSlider(this.value)" ontouchstart="">
+      <div style="display:flex;justify-content:space-between;" class="mt8">
+        <span class="caption">3 萬</span>
+        <span class="caption">500 萬</span>
+      </div>
+    </div>
+
+    <div class="comment-box">
+      <p class="comment-text" id="slider-comment">試著把滑桿往右拉⋯⋯</p>
+    </div>
+
+    <div id="freeze-msg" style="display:none;margin-top:16px;padding:14px 16px;background:#FEF9C3;border-radius:12px;">
+      <p class="body" style="color:#92400E;">前 9 個人的薪水一分都沒有漲。<br><strong>但平均值現在是多少？</strong></p>
+    </div>
+
+    <div id="conclusion-msg" style="display:none;margin-top:16px;">
+      <div class="card" style="border-left:4px solid var(--blue);">
+        <p style="font-size:16px;font-weight:700;color:var(--black);margin-bottom:8px;">平均值：不管數值如何改變</p>
+        <p style="font-size:16px;font-weight:700;color:var(--blue);">中位數：始終如一</p>
+        <div class="divider"></div>
+        <p class="body">中位數是把所有人排成一排，取最中間那個人的薪水。不管第 10 個人賺多少，中間那個人都不會變。這就是為什麼中位數更能代表「一般人」的真實狀況。</p>
+      </div>
+    </div>
+
+    <div class="note-box mt16">
+      <p class="note-text">※ 真實主計處分布曲線數據為區間分布（例如 3 萬以下有幾 %、3–4 萬有幾 %），此分布曲線根據這些真實區間數據重建。</p>
+    </div>
+  </div>
+  <div class="footer">
+    <button class="btn-next" onclick="goTo(3)">看真實台灣薪資分布 →</button>
+  </div>
+</div>
+
+<!-- ══ SCREEN 3 — CHART ══ -->
+<div id="screen-3" class="screen">
+  <div class="nav">
+    <span class="nav-title">環節三：真實分布圖</span>
+    <div class="nav-steps">
+      <div class="nav-dot done"></div>
+      <div class="nav-dot done"></div>
+      <div class="nav-dot active"></div>
+      <div class="nav-dot"></div>
+      <div class="nav-dot"></div>
+    </div>
+  </div>
+  <div class="content">
+    <div class="badge badge-blue">環節三</div>
+    <p class="h2">剛才是模擬，現在來看真實數據薪資分布長什麼樣子？</p>
+
+    <div class="chart-legend mt16">
+      <div class="legend-item">
+        <div class="legend-line solid"></div>
+        <span style="color:var(--blue)">中位數 37,274</span>
+      </div>
+      <div class="legend-item">
+        <div class="legend-line dashed"></div>
+        <span style="color:var(--orange)">平均值 46,450</span>
+      </div>
+    </div>
+
+    <div class="chart-container">
+      <canvas id="salary-chart"></canvas>
+    </div>
+
+    <div class="chart-text-reveal" id="ct1">
+      <div class="card" style="border-left:4px solid var(--blue);padding:14px 16px;">
+        <p style="font-size:13px;font-weight:700;color:var(--mid-blue);margin-bottom:4px;">中位數：37,274 元</p>
+        <p class="body">這條線把台灣所有上班族切成兩半，一半在左，一半在右。這才是「一般人」的薪資位置。</p>
+      </div>
+    </div>
+
+    <div class="chart-text-reveal mt12" id="ct2">
+      <div class="card" style="border-left:4px solid var(--orange);padding:14px 16px;">
+        <p style="font-size:13px;font-weight:700;color:#C2410C;margin-bottom:4px;">平均值：46,450 元</p>
+        <p class="body">平均值在這裡，和中位數相差將近 9,000 元，比例上差了 24%。但注意看平均線右邊——其實是少數人。</p>
+      </div>
+    </div>
+
+    <div class="fill-stat" id="ct3">
+      <div class="fill-stat-number">69%</div>
+      <div class="fill-stat-label">的台灣上班族，月薪低於平均值</div>
+    </div>
+
+    <div class="chart-text-reveal mt8" id="ct4">
+      <p class="body">將近 7 成的人，月薪低於那個被媒體大肆宣傳的 6 萬 1。這不是因為大家薪水低，而是因為少數極高薪的人，把平均值往右拉了。</p>
+    </div>
+
+    <div class="chart-text-reveal mt12" id="ct5">
+      <p class="body" style="font-weight:700;color:var(--black);">現在知道薪資分布後，我們來試算一下。</p>
+    </div>
+  </div>
+  <div class="footer">
+    <button class="btn-next" onclick="goTo(4)">環節四：算算看 →</button>
+  </div>
+</div>
+
+<!-- ══ SCREEN 4 — FLIP CARDS ══ -->
+<div id="screen-4" class="screen">
+  <div class="nav">
+    <span class="nav-title">環節四：自己動手算</span>
+    <div class="nav-steps">
+      <div class="nav-dot done"></div>
+      <div class="nav-dot done"></div>
+      <div class="nav-dot done"></div>
+      <div class="nav-dot active"></div>
+      <div class="nav-dot"></div>
+    </div>
+  </div>
+  <div class="content">
+    <div class="badge badge-orange">環節四</div>
+
+    <!-- LINE mock -->
+    <div class="line-mock">
+      <div class="line-header">
+        <span class="line-back">‹</span>
+        <div class="line-avatar">HR</div>
+        <span class="line-name">A 公司 HR</span>
+        <div class="line-icons">
+          <span>📞</span><span>☰</span>
+        </div>
+      </div>
+      <div class="line-body">
+        <div class="line-bubble">
+          <p>您好！我們公司<strong>平均薪資 10 萬</strong>喔！歡迎加入我們 😊</p>
+          <span class="line-time">下午 2:34</span>
+        </div>
+      </div>
+    </div>
+
+    <p class="body mb8">你在找工作，HR 傳這則訊息給你。<strong>你心動嗎？</strong></p>
+    <p class="body mb8">這間公司有 10 位員工，點開每張牌看看他們的薪資：</p>
+
+    <div class="flip-grid" id="flip-grid"><div class="flip-card" id="fc-0">
+      <div class="flip-card-inner">
+        <div class="flip-front"><span class="card-num">員工1</span><span class="card-q">?</span></div>
+        <div class="flip-back"><span class="card-num">員工 1</span><span class="card-salary">28,000<br>元/月</span></div>
+      </div>
+    </div><div class="flip-card" id="fc-1">
+      <div class="flip-card-inner">
+        <div class="flip-front"><span class="card-num">員工2</span><span class="card-q">?</span></div>
+        <div class="flip-back"><span class="card-num">員工 2</span><span class="card-salary">30,000<br>元/月</span></div>
+      </div>
+    </div><div class="flip-card" id="fc-2">
+      <div class="flip-card-inner">
+        <div class="flip-front"><span class="card-num">員工3</span><span class="card-q">?</span></div>
+        <div class="flip-back"><span class="card-num">員工 3</span><span class="card-salary">31,000<br>元/月</span></div>
+      </div>
+    </div><div class="flip-card" id="fc-3">
+      <div class="flip-card-inner">
+        <div class="flip-front"><span class="card-num">員工4</span><span class="card-q">?</span></div>
+        <div class="flip-back"><span class="card-num">員工 4</span><span class="card-salary">32,000<br>元/月</span></div>
+      </div>
+    </div><div class="flip-card" id="fc-4">
+      <div class="flip-card-inner">
+        <div class="flip-front"><span class="card-num">員工5</span><span class="card-q">?</span></div>
+        <div class="flip-back"><span class="card-num">員工 5</span><span class="card-salary">33,000<br>元/月</span></div>
+      </div>
+    </div><div class="flip-card" id="fc-5">
+      <div class="flip-card-inner">
+        <div class="flip-front"><span class="card-num">員工6</span><span class="card-q">?</span></div>
+        <div class="flip-back"><span class="card-num">員工 6</span><span class="card-salary">35,000<br>元/月</span></div>
+      </div>
+    </div><div class="flip-card" id="fc-6">
+      <div class="flip-card-inner">
+        <div class="flip-front"><span class="card-num">員工7</span><span class="card-q">?</span></div>
+        <div class="flip-back"><span class="card-num">員工 7</span><span class="card-salary">38,000<br>元/月</span></div>
+      </div>
+    </div><div class="flip-card" id="fc-7">
+      <div class="flip-card-inner">
+        <div class="flip-front"><span class="card-num">員工8</span><span class="card-q">?</span></div>
+        <div class="flip-back"><span class="card-num">員工 8</span><span class="card-salary">40,000<br>元/月</span></div>
+      </div>
+    </div><div class="flip-card" id="fc-8">
+      <div class="flip-card-inner">
+        <div class="flip-front"><span class="card-num">員工9</span><span class="card-q">?</span></div>
+        <div class="flip-back"><span class="card-num">員工 9</span><span class="card-salary">45,000<br>元/月</span></div>
+      </div>
+    </div><div class="flip-card mystery-card" id="fc-9">
+    <div class="flip-card-inner">
+      <div class="flip-front"><span class="card-num">員工10</span><span class="card-q">?</span></div>
+      <div class="flip-back boss-reveal"><span class="card-num">老闆 👑</span><span class="card-salary">688,000<br>元/月</span></div>
+    </div>
+  </div></div>
+
+    <div id="guess-section" style="display:none;">
+      <div class="divider"></div>
+      <p class="body mb8">前 9 位員工都揭曉了。<br>如果公司<strong>平均薪資是 10 萬</strong>，<br>第 10 個人薪資應該是多少？</p>
+      <div class="guess-wrap">
+        <div class="guess-input-row">
+          <input type="number" class="guess-input" id="guess-input" placeholder="輸入你的猜測" inputmode="numeric">
+          <button class="guess-submit" onclick="submitGuess()">送出</button>
+        </div>
+        <div class="guess-result" id="guess-result">
+          <p class="body" id="guess-result-text"></p>
+        </div>
+      </div>
+    </div>
+
+    <div id="reveal-section" style="display:none;">
+      <div style="background:#FEF9C3;border-radius:14px;padding:20px;text-align:center;margin:16px 0;">
+        <div style="font-size:13px;font-weight:500;color:#92400E;margin-bottom:8px;">第 10 個人是老闆</div>
+        <div style="font-size:40px;font-weight:900;color:#92400E;">688,000 元</div>
+        <div style="font-size:13px;color:#A16207;margin-top:8px;">平均值因此拉高到 100,000 元</div>
+      </div>
+      <div class="card" style="border:none;background:#FEF2F2;padding:16px;">
+        <p class="body" style="color:#991B1B;">HR 沒有說謊。這間公司的平均薪資確實是 10 萬。但如果你去上班，薪水不會是這個平均值，甚至不會接近。</p>
+      </div>
+      <p class="body mt16 mb8">如果你去這間公司上班，你的薪水最可能是多少？</p>
+      <div class="choice-grid">
+        <div class="choice-btn" style="border-color:#DC2626;background:#FEF2F2;">
+          <span class="choice-label">A 相信 HR</span>
+          <span class="choice-value" style="color:#DC2626;">100,000 元</span>
+          <span class="choice-desc">平均值</span>
+        </div>
+        <div class="choice-btn" style="border-color:var(--blue);background:var(--blue-light);">
+          <span class="choice-label">B 相信人生</span>
+          <span class="choice-value" style="color:var(--mid-blue);">33,500 元</span>
+          <span class="choice-desc">中位數</span>
+        </div>
+      </div>
+      <p class="body mt12" style="font-weight:700;color:var(--black);">選 A，代表你相信 HR。選 B，代表你相信人生。</p>
+    </div>
+  </div>
+  <div class="footer">
+    <button class="btn-next" id="btn-4" onclick="handleBtn4()">翻開下一張牌</button>
+  </div>
+</div>
+
+<!-- ══ SCREEN 5 — PERCENTILE ══ -->
+<div id="screen-5" class="screen">
+  <div class="nav">
+    <span class="nav-title">環節五：你的薪資戰鬥力</span>
+    <div class="nav-steps">
+      <div class="nav-dot done"></div>
+      <div class="nav-dot done"></div>
+      <div class="nav-dot done"></div>
+      <div class="nav-dot done"></div>
+      <div class="nav-dot active"></div>
+    </div>
+  </div>
+  <div class="content">
+    <div class="badge badge-blue">環節五</div>
+    <p class="h2">你贏過台灣幾 % 的上班族？</p>
+    <p class="body mt8">輸入你的月薪（或任意數字），看看你在台灣薪資分布的位置。</p>
+
+    <div class="pct-input-wrap">
+      <label class="pct-input-label">月薪（元）</label>
+      <div class="pct-input-row">
+        <input type="number" class="pct-input" id="pct-input" placeholder="例如 40000" inputmode="numeric">
+        <button class="pct-btn" onclick="calcPercentile()">計算</button>
+      </div>
+    </div>
+
+    <div class="pct-result-wrap" id="pct-result">
+      <div class="progress-bar-wrap">
+        <div class="progress-bar-bg">
+          <div class="progress-bar-fill" id="pct-bar"></div>
+        </div>
+      </div>
+      <div class="pct-number" id="pct-number">0%</div>
+      <div class="pct-sublabel">的台灣受僱員工月薪低於你</div>
+      <div class="pct-comment" id="pct-comment"></div>
+      <div class="mt16" style="padding:14px 16px;background:var(--gray-100);border-radius:12px;">
+        <div style="display:flex;justify-content:space-between;margin-bottom:6px;">
+          <span class="caption">全國中位數</span>
+          <span style="font-size:13px;font-weight:700;color:var(--blue);">37,274 元</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;">
+          <span class="caption">全國平均值</span>
+          <span style="font-size:13px;font-weight:700;color:var(--orange);">46,450 元</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="footer">
+    <button class="btn-next" onclick="goTo(6)">看最終結論 →</button>
+  </div>
+</div>
+
+<!-- ══ SCREEN 6 — FINALE ══ -->
+<div id="screen-6" class="screen">
+  <div>
+    <p class="finale-line1">
+      HR 沒有說謊。<br>
+      但他選擇告訴你平均值，<br>
+      而不是中位數。
+    </p>
+    <p class="finale-line2">
+      下次找工作看到有人告訴你任何「平均」數字，<br>
+      你應該要問——<br><br>
+      薪資曲線分布長什麼樣子？<br>
+      中位數是多少？
+    </p>
+  </div>
+</div>
+
+<script src="./薪資真相 — 平均值 vs 中位數_files/qrcode.min.js"></script>
+<script>
+// ══ DATA ══
+const FIXED_SALARIES = [28000,30000,31000,32000,33000,35000,38000,40000,45000];
+const BOSS_SALARY = 688000;
+
+// Taiwan salary distribution (approximate from DGBAS data)
+// Each entry: [monthly_salary_upper, cumulative_percentile]
+const DIST = [
+  [20000, 3], [25000, 8], [30000, 18], [35000, 32],
+  [40000, 50], [45000, 62], [50000, 72], [55000, 79],
+  [60000, 84], [70000, 89], [80000, 93], [100000, 96],
+  [150000, 98.5], [200000, 99.5]
+];
+
+// Chart data points (salary distribution curve)
+const CHART_DATA = [
+  {x:15000,y:1},{x:20000,y:3},{x:25000,y:7},{x:28000,y:10},
+  {x:30000,y:13},{x:32000,y:15},{x:35000,y:14},{x:38000,y:11},
+  {x:40000,y:9},{x:45000,y:7},{x:50000,y:5},{x:55000,y:4},
+  {x:60000,y:3},{x:70000,y:2.5},{x:80000,y:2},{x:100000,y:1.5},
+  {x:130000,y:0.8},{x:160000,y:0.4},{x:200000,y:0.2}
+];
+
+const MEDIAN = 37274;
+const MEAN = 46450;
+
+let currentScreen = 'screen-qr';
+let quizAnswered = false;
+let sliderVal = 30000;
+let flipIndex = 0;
+let flipped = [];
+let chartDrawn = false;
+let chartStep = 0;
+
+// ══ QR CODE ══
+window.addEventListener('load', () => {
+  const url = window.location.href.replace(/\/$/, '').replace('index.html','');
+  document.getElementById('qr-url-text').textContent = url;
+  new QRCode(document.getElementById('qr-canvas'), {
+    text: url, width: 240, height: 240,
+    colorDark: '#0A0A0A', colorLight: '#ffffff',
+    correctLevel: QRCode.CorrectLevel.H
+  });
+  initPeople();
+  initFlipCards();
+});
+
+function startDemo() { goTo(1); }
+
+// ══ NAVIGATION ══
+function goTo(n) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  const target = document.getElementById('screen-' + n);
+  if (target) {
+    target.classList.add('active');
+    target.scrollTop = 0;
+    window.scrollTo(0, 0);
+    currentScreen = 'screen-' + n;
+    if (n === 3) initChart();
+    if (n === 6) {}
+  }
+}
+
+// ══ SCREEN 1: QUIZ ══
+function selectOption(el, opt) {
+  if (quizAnswered) return;
+  document.querySelectorAll('.quiz-option').forEach(o => o.classList.remove('selected'));
+  el.classList.add('selected');
+  document.getElementById('btn-1').disabled = false;
+  document.getElementById('btn-1').textContent = '揭曉答案 →';
+  document.getElementById('btn-1').onclick = () => revealQuiz(opt);
+}
+
+function revealQuiz(selected) {
+  quizAnswered = true;
+  document.querySelectorAll('.quiz-option').forEach(o => {
+    const isD = o.id === 'opt-D';
+    if (isD) o.classList.add('correct');
+    else if (o.classList.contains('selected') && !isD) o.classList.add('wrong');
+    o.style.pointerEvents = 'none';
+  });
+  const box = document.getElementById('quiz-reveal');
+  box.classList.add('show');
+  document.getElementById('btn-1').textContent = '下一個環節 →';
+  document.getElementById('btn-1').onclick = () => goTo(2);
+  setTimeout(() => box.scrollIntoView({behavior:'smooth',block:'nearest'}), 300);
+}
+
+// ══ SCREEN 2: SLIDER ══
+function initPeople() {
+  const row = document.getElementById('people-row');
+  row.innerHTML = '';
+  FIXED_SALARIES.forEach((s, i) => {
+    row.innerHTML += `<div class="person-card">
+      <div class="person-avatar normal" id="av-${i}">${personSVG()}</div>
+      <div class="person-salary" id="sal-${i}">${fmtK(s)}</div>
+    </div>`;
+  });
+  row.innerHTML += `<div class="person-card mystery">
+    <div class="person-avatar" id="av-9">${personSVG('gray')}</div>
+    <div class="person-salary" id="sal-9">???</div>
+  </div>`;
+  updateSlider(30000);
+}
+
+function personSVG(color) {
+  const c = color === 'gray' ? '#9CA3AF' : 'currentColor';
+  return `<svg viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="14" cy="9" r="5" fill="${color === 'gray' ? '#D1D5DB' : '#60A5FA'}"/>
+    <path d="M4 26c0-5.523 4.477-10 10-10s10 4.477 10 10" stroke="${color === 'gray' ? '#9CA3AF' : '#2563EB'}" stroke-width="2" stroke-linecap="round"/>
+  </svg>`;
+}
+
+function personSVGBoss() {
+  return `<svg viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="14" cy="9" r="5" fill="#F59E0B"/>
+    <path d="M4 26c0-5.523 4.477-10 10-10s10 4.477 10 10" stroke="#D97706" stroke-width="2" stroke-linecap="round"/>
+    <text x="14" y="27" text-anchor="middle" font-size="8" fill="#92400E">👑</text>
+  </svg>`;
+}
+
+function updateSlider(val) {
+  val = parseInt(val);
+  sliderVal = val;
+  document.getElementById('slider-val').textContent = fmtNum(val);
+  document.getElementById('sal-9').textContent = fmtK(val);
+
+  const all = [...FIXED_SALARIES, val];
+  const mean = Math.round(all.reduce((a,b) => a+b, 0) / all.length);
+  const sorted = [...all].sort((a,b) => a-b);
+  const mid = sorted.length % 2 === 0
+    ? Math.round((sorted[sorted.length/2-1] + sorted[sorted.length/2]) / 2)
+    : sorted[Math.floor(sorted.length/2)];
+
+  document.getElementById('stat-mean').textContent = fmtNum(mean);
+  document.getElementById('stat-median').textContent = fmtNum(mid);
+
+  // Avatar style
+  const av = document.getElementById('av-9');
+  const sal = document.getElementById('sal-9');
+  let emoji = '';
+  if (val < 100000) {
+    av.className = 'person-avatar normal'; av.innerHTML = personSVG(); emoji = '';
+    sal.style.color = 'var(--gray-800)';
+  } else if (val < 500000) {
+    av.className = 'person-avatar suit'; av.innerHTML = personSVG(); emoji = ' 💼';
+    sal.style.color = '#7C3AED';
+  } else if (val < 1000000) {
+    av.className = 'person-avatar rich'; av.innerHTML = personSVG(); emoji = ' 🚗';
+    sal.style.color = '#D97706';
+  } else if (val < 3000000) {
+    av.className = 'person-avatar vip'; av.innerHTML = personSVGBoss(); emoji = ' 💰';
+    sal.style.color = '#C2410C';
+  } else {
+    av.className = 'person-avatar boss'; av.innerHTML = personSVGBoss(); emoji = ' 🏆';
+    sal.style.color = '#991B1B';
+  }
+  document.getElementById('sal-9').textContent = fmtK(val) + emoji;
+
+  // Comments
+  let comment = '試著把滑桿往右拉⋯⋯';
+  const freezeMsg = document.getElementById('freeze-msg');
+  const concMsg = document.getElementById('conclusion-msg');
+
+  if (val >= 500000 && val < 1000000) {
+    comment = '「恭喜，平均值已超越 85% 的真實薪資」';
+    freezeMsg.style.display = 'none';
+  } else if (val >= 1000000 && val < 2000000) {
+    comment = '一個人，讓所有人「平均」都變成高薪族了';
+    freezeMsg.style.display = 'none';
+  } else if (val >= 2000000) {
+    comment = '這就是為什麼郭台銘的薪水跟你有關係 😅';
+    freezeMsg.style.display = 'none';
+  } else if (val >= 100000 && val < 500000) {
+    comment = '這 9 個人從來沒變有錢，但平均值說他們變了';
+    freezeMsg.style.display = val >= 900000 ? 'block' : 'none';
+  } else {
+    freezeMsg.style.display = 'none';
+  }
+
+  if (val >= 1000000) {
+    freezeMsg.style.display = 'block';
+    concMsg.style.display = 'block';
+  } else {
+    concMsg.style.display = 'none';
+  }
+
+  document.getElementById('slider-comment').textContent = comment;
+}
+
+// ══ SCREEN 3: CHART ══
+function initChart() {
+  if (chartDrawn) return;
+  chartDrawn = true;
+  chartStep = 0;
+  const canvas = document.getElementById('salary-chart');
+  const ctx = canvas.getContext('2d');
+  const dpr = window.devicePixelRatio || 1;
+  const rect = canvas.getBoundingClientRect();
+  canvas.width = rect.width * dpr;
+  canvas.height = rect.height * dpr;
+  ctx.scale(dpr, dpr);
+  const W = rect.width, H = rect.height;
+  const PAD = {left: 10, right: 10, top: 16, bottom: 24};
+  const chartW = W - PAD.left - PAD.right;
+  const chartH = H - PAD.top - PAD.bottom;
+
+  const minX = 10000, maxX = 200000;
+  const maxY = 16;
+
+  function toX(sal) { return PAD.left + (sal - minX) / (maxX - minX) * chartW; }
+  function toY(pct) { return PAD.top + chartH - (pct / maxY) * chartH; }
+
+  // Draw axes
+  ctx.strokeStyle = '#E5E7EB'; ctx.lineWidth = 1;
+  ctx.beginPath();
+  ctx.moveTo(PAD.left, PAD.top + chartH);
+  ctx.lineTo(PAD.left + chartW, PAD.top + chartH);
+  ctx.stroke();
+
+  // X axis labels
+  ctx.fillStyle = '#9CA3AF'; ctx.font = '10px Noto Sans TC'; ctx.textAlign = 'center';
+  [20000,40000,60000,80000,100000,150000].forEach(v => {
+    ctx.fillText(fmtK(v), toX(v), H - 4);
+  });
+
+  // Animate curve drawing
+  let progress = 0;
+  const pts = CHART_DATA.map(d => ({x: toX(d.x), y: toY(d.y)}));
+  const totalPts = pts.length;
+
+  function drawCurve(p) {
+    ctx.clearRect(0, 0, W, H);
+    // Redraw axes
+    ctx.strokeStyle = '#E5E7EB'; ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(PAD.left, PAD.top + chartH); ctx.lineTo(PAD.left + chartW, PAD.top + chartH); ctx.stroke();
+    ctx.fillStyle = '#9CA3AF'; ctx.font = '10px Noto Sans TC'; ctx.textAlign = 'center';
+    [20000,40000,60000,80000,100000,150000].forEach(v => { ctx.fillText(fmtK(v), toX(v), H - 4); });
+
+    const end = Math.floor(p * (totalPts - 1));
+    if (end < 1) return;
+
+    // Fill area (light blue, only up to mean for "69%" effect after step 3)
+    if (chartStep >= 3) {
+      ctx.beginPath();
+      ctx.moveTo(pts[0].x, PAD.top + chartH);
+      for (let i = 0; i <= end; i++) {
+        if (pts[i].x <= toX(MEAN)) ctx.lineTo(pts[i].x, pts[i].y);
+      }
+      ctx.lineTo(toX(MEAN), PAD.top + chartH);
+      ctx.closePath();
+      ctx.fillStyle = 'rgba(219,234,254,0.5)';
+      ctx.fill();
+    }
+
+    // Curve
+    ctx.beginPath(); ctx.moveTo(pts[0].x, pts[0].y);
+    for (let i = 1; i <= end; i++) {
+      const cp1x = (pts[i-1].x + pts[i].x) / 2;
+      ctx.bezierCurveTo(cp1x, pts[i-1].y, cp1x, pts[i].y, pts[i].x, pts[i].y);
+    }
+    ctx.strokeStyle = '#374151'; ctx.lineWidth = 2.5;
+    ctx.stroke();
+
+    // Median line
+    if (chartStep >= 1) {
+      const mx = toX(MEDIAN);
+      ctx.beginPath(); ctx.moveTo(mx, PAD.top); ctx.lineTo(mx, PAD.top + chartH);
+      ctx.strokeStyle = '#2563EB'; ctx.lineWidth = 2; ctx.setLineDash([]);
+      ctx.stroke();
+      ctx.fillStyle = '#2563EB'; ctx.font = 'bold 11px Noto Sans TC'; ctx.textAlign = 'center';
+      ctx.fillText('中位數', mx, PAD.top + 10);
+    }
+
+    // Mean line
+    if (chartStep >= 2) {
+      const ax = toX(MEAN);
+      ctx.beginPath(); ctx.moveTo(ax, PAD.top); ctx.lineTo(ax, PAD.top + chartH);
+      ctx.strokeStyle = '#FF6B2B'; ctx.lineWidth = 2;
+      ctx.setLineDash([6, 4]); ctx.stroke(); ctx.setLineDash([]);
+      ctx.fillStyle = '#FF6B2B'; ctx.font = 'bold 11px Noto Sans TC'; ctx.textAlign = 'center';
+      ctx.fillText('平均值', ax, PAD.top + 10);
+    }
+  }
+
+  // Animate
+  let startTime = null;
+  const duration = 1800;
+  function animate(ts) {
+    if (!startTime) startTime = ts;
+    progress = Math.min((ts - startTime) / duration, 1);
+    drawCurve(progress);
+    if (progress < 1) requestAnimationFrame(animate);
+    else {
+      // Trigger text reveals
+      setTimeout(() => {
+        chartStep = 1; drawCurve(1);
+        document.getElementById('ct1').classList.add('show');
+      }, 500);
+      setTimeout(() => {
+        chartStep = 2; drawCurve(1);
+        document.getElementById('ct2').classList.add('show');
+      }, 1500);
+      setTimeout(() => {
+        chartStep = 3; drawCurve(1);
+        document.getElementById('ct3').classList.add('show');
+      }, 2500);
+      setTimeout(() => { document.getElementById('ct4').classList.add('show'); }, 3200);
+      setTimeout(() => { document.getElementById('ct5').classList.add('show'); }, 4000);
+    }
+  }
+  requestAnimationFrame(animate);
+}
+
+// ══ SCREEN 4: FLIP CARDS ══
+const SALARIES_4 = [28000,30000,31000,32000,33000,35000,38000,40000,45000];
+
+function initFlipCards() {
+  const grid = document.getElementById('flip-grid');
+  grid.innerHTML = '';
+  flipped = new Array(10).fill(false);
+  flipIndex = 0;
+
+  SALARIES_4.forEach((s, i) => {
+    grid.innerHTML += `<div class="flip-card" id="fc-${i}">
+      <div class="flip-card-inner">
+        <div class="flip-front"><span class="card-num">員工${i+1}</span><span class="card-q">?</span></div>
+        <div class="flip-back"><span class="card-num">員工 ${i+1}</span><span class="card-salary">${fmtNum(s)}<br>元/月</span></div>
+      </div>
+    </div>`;
+  });
+  grid.innerHTML += `<div class="flip-card mystery-card" id="fc-9">
+    <div class="flip-card-inner">
+      <div class="flip-front"><span class="card-num">員工10</span><span class="card-q">?</span></div>
+      <div class="flip-back boss-reveal"><span class="card-num">老闆 👑</span><span class="card-salary">688,000<br>元/月</span></div>
+    </div>
+  </div>`;
+}
+
+function handleBtn4() {
+  if (flipIndex < 9) {
+    const card = document.getElementById('fc-' + flipIndex);
+    card.classList.add('flipped');
+    flipIndex++;
+    if (flipIndex === 9) {
+      document.getElementById('guess-section').style.display = 'block';
+      document.getElementById('btn-4').textContent = '揭曉老闆薪資';
+      document.getElementById('btn-4').onclick = revealBoss;
+      setTimeout(() => document.getElementById('guess-section').scrollIntoView({behavior:'smooth',block:'nearest'}), 300);
+    }
+  }
+}
+
+function submitGuess() {
+  const val = parseInt(document.getElementById('guess-input').value);
+  if (!val || val < 1000) return;
+  const all = [...SALARIES_4, val];
+  const mean = Math.round(all.reduce((a,b) => a+b, 0) / all.length);
+  const result = document.getElementById('guess-result');
+  document.getElementById('guess-result-text').textContent =
+    `根據你的猜測，平均值會是 ${fmtNum(mean)} 元。`;
+  result.classList.add('show');
+}
+
+function revealBoss() {
+  const card = document.getElementById('fc-9');
+  card.classList.add('flipped');
+  document.getElementById('guess-section').style.display = 'none';
+  document.getElementById('reveal-section').style.display = 'block';
+  document.getElementById('btn-4').textContent = '環節五：你的薪資戰鬥力 →';
+  document.getElementById('btn-4').onclick = () => goTo(5);
+  setTimeout(() => document.getElementById('reveal-section').scrollIntoView({behavior:'smooth',block:'nearest'}), 400);
+}
+
+// ══ SCREEN 5: PERCENTILE ══
+function calcPercentile() {
+  const val = parseInt(document.getElementById('pct-input').value);
+  if (!val || val < 1000) return;
+
+  let pct = 0;
+  for (let i = 0; i < DIST.length; i++) {
+    if (val <= DIST[i][0]) {
+      if (i === 0) { pct = DIST[0][1] * (val / DIST[0][0]); break; }
+      const prev = DIST[i-1];
+      const ratio = (val - prev[0]) / (DIST[i][0] - prev[0]);
+      pct = prev[1] + ratio * (DIST[i][1] - prev[1]);
+      break;
+    }
+    if (i === DIST.length - 1) pct = 99.5;
+  }
+  pct = Math.min(99.9, Math.max(0.1, pct));
+
+  const result = document.getElementById('pct-result');
+  result.classList.add('show');
+  document.getElementById('pct-number').textContent = Math.round(pct) + '%';
+  document.getElementById('pct-bar').style.width = pct + '%';
+
+  let comment = '';
+  if (pct <= 30) comment = '新手村居民，但你不孤單——這裡最熱鬧 🙂';
+  else if (pct <= 50) comment = '平均線以下，但你贏過一半的人。等等，這句話哪裡怪怪的？🤔';
+  else if (pct <= 70) comment = '中等偏上，台灣薪資金字塔中段班 💪';
+  else if (pct <= 85) comment = '前段班！不過距離「平均值」可能還有一段距離 🎯';
+  else if (pct <= 95) comment = '高薪族，你就是在拉高別人平均值的那種人 📈';
+  else comment = '你就是那個讓平均值失真的傢伙。謝謝你毀了統計學 👑';
+
+  document.getElementById('pct-comment').textContent = comment;
+  setTimeout(() => result.scrollIntoView({behavior:'smooth',block:'nearest'}), 200);
+}
+
+// ══ UTILS ══
+function fmtNum(n) { return n.toLocaleString('zh-TW'); }
+function fmtK(n) {
+  if (n >= 10000) return Math.round(n/1000) + 'K';
+  return fmtNum(n);
+}
+</script>
+
+
+</body></html>
