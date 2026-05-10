@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<!-- saved from url=(0050)file:///Users/jerrickhuang/Downloads/index_22.html -->
-<html lang="zh-TW"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>薪資真相 — 平均值 vs 中位數</title>
-<link href="./薪資真相 — 平均值 vs 中位數final_files/css2" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
 <style>
 :root {
   --blue: #2563EB; --blue-light: #DBEAFE; --mid-blue: #1D4ED8;
@@ -153,7 +153,7 @@ input[type=range]::-moz-range-thumb { width:28px; height:28px; border-radius:50%
 <div id="screen-qr" class="screen active">
   <div class="qr-wrap">
     <div class="qr-title">📊 薪資真相</div>
-    <img src="./薪資真相 — 平均值 vs 中位數final_files/saved_resource" width="220" height="220" style="border-radius:12px;box-shadow:0 4px 24px rgba(0,0,0,0.08);" alt="QR Code" onerror="this.style.display=&#39;none&#39;;document.getElementById(&#39;qr-fallback&#39;).style.display=&#39;block&#39;;">
+    <img src="./qrcode.png" width="220" height="220" style="border-radius:12px;box-shadow:0 4px 24px rgba(0,0,0,0.08);" alt="QR Code" onerror="this.style.display='none';document.getElementById('qr-fallback').style.display='block';">
     <div id="qr-fallback" style="display:none;font-size:60px;">💰</div>
     <div class="qr-sub">用手機掃描進入互動 Demo</div>
     <div class="qr-url" style="margin-top:4px;">https://jerrickhuang.github.io/salary-demo/</div>
@@ -175,10 +175,10 @@ input[type=range]::-moz-range-thumb { width:28px; height:28px; border-radius:50%
     <p class="h2">根據主計處於 2025 年 2 月 17 日，最新發布台灣 2024 年上班族平均月薪數值，您認為是多少？</p>
     <p class="body mt8">憑感覺猜，台灣上班族平均月薪，ABCD 哪個？</p>
     <div class="quiz-options">
-      <button class="quiz-option" onclick="selectOption(this,&#39;A&#39;)" id="opt-A"><span class="opt-label">A</span><span class="opt-value">3 萬多</span></button>
-      <button class="quiz-option" onclick="selectOption(this,&#39;B&#39;)" id="opt-B"><span class="opt-label">B</span><span class="opt-value">4 萬多</span></button>
-      <button class="quiz-option" onclick="selectOption(this,&#39;C&#39;)" id="opt-C"><span class="opt-label">C</span><span class="opt-value">5 萬多</span></button>
-      <button class="quiz-option" onclick="selectOption(this,&#39;D&#39;)" id="opt-D"><span class="opt-label">D</span><span class="opt-value">6 萬多</span></button>
+      <button class="quiz-option" onclick="selectOption(this,'A')" id="opt-A"><span class="opt-label">A</span><span class="opt-value">3 萬多</span></button>
+      <button class="quiz-option" onclick="selectOption(this,'B')" id="opt-B"><span class="opt-label">B</span><span class="opt-value">4 萬多</span></button>
+      <button class="quiz-option" onclick="selectOption(this,'C')" id="opt-C"><span class="opt-label">C</span><span class="opt-value">5 萬多</span></button>
+      <button class="quiz-option" onclick="selectOption(this,'D')" id="opt-D"><span class="opt-label">D</span><span class="opt-value">6 萬多</span></button>
     </div>
     <div class="reveal-box" id="quiz-reveal">
       <div style="text-align:center">
@@ -194,7 +194,7 @@ input[type=range]::-moz-range-thumb { width:28px; height:28px; border-radius:50%
     </div>
   </div>
   <div class="footer">
-    <button class="btn-next" id="btn-1" onclick="revealQuiz()" disabled="">揭曉答案</button>
+    <button class="btn-next" id="btn-1" onclick="revealQuiz()" disabled>揭曉答案</button>
   </div>
 </div>
 
@@ -211,16 +211,16 @@ input[type=range]::-moz-range-thumb { width:28px; height:28px; border-radius:50%
     <div class="badge badge-orange">環節二</div>
     <p class="h2">拉動滑桿，看平均值如何被一個人拉爆</p>
     <p class="body mt8">前 9 人薪資固定，第 10 人由你決定。</p>
-    <div class="people-row" id="people-row"><div class="person-card"><div class="person-avatar normal" id="av-0"><svg viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="14" cy="9" r="5" fill="#60A5FA"></circle><path d="M4 26c0-5.523 4.477-10 10-10s10 4.477 10 10" stroke="#2563EB" stroke-width="2" stroke-linecap="round"></path></svg></div><div class="person-salary" id="sal-0">28K</div></div><div class="person-card"><div class="person-avatar normal" id="av-1"><svg viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="14" cy="9" r="5" fill="#60A5FA"></circle><path d="M4 26c0-5.523 4.477-10 10-10s10 4.477 10 10" stroke="#2563EB" stroke-width="2" stroke-linecap="round"></path></svg></div><div class="person-salary" id="sal-1">30K</div></div><div class="person-card"><div class="person-avatar normal" id="av-2"><svg viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="14" cy="9" r="5" fill="#60A5FA"></circle><path d="M4 26c0-5.523 4.477-10 10-10s10 4.477 10 10" stroke="#2563EB" stroke-width="2" stroke-linecap="round"></path></svg></div><div class="person-salary" id="sal-2">31K</div></div><div class="person-card"><div class="person-avatar normal" id="av-3"><svg viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="14" cy="9" r="5" fill="#60A5FA"></circle><path d="M4 26c0-5.523 4.477-10 10-10s10 4.477 10 10" stroke="#2563EB" stroke-width="2" stroke-linecap="round"></path></svg></div><div class="person-salary" id="sal-3">32K</div></div><div class="person-card"><div class="person-avatar normal" id="av-4"><svg viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="14" cy="9" r="5" fill="#60A5FA"></circle><path d="M4 26c0-5.523 4.477-10 10-10s10 4.477 10 10" stroke="#2563EB" stroke-width="2" stroke-linecap="round"></path></svg></div><div class="person-salary" id="sal-4">33K</div></div><div class="person-card"><div class="person-avatar normal" id="av-5"><svg viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="14" cy="9" r="5" fill="#60A5FA"></circle><path d="M4 26c0-5.523 4.477-10 10-10s10 4.477 10 10" stroke="#2563EB" stroke-width="2" stroke-linecap="round"></path></svg></div><div class="person-salary" id="sal-5">35K</div></div><div class="person-card"><div class="person-avatar normal" id="av-6"><svg viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="14" cy="9" r="5" fill="#60A5FA"></circle><path d="M4 26c0-5.523 4.477-10 10-10s10 4.477 10 10" stroke="#2563EB" stroke-width="2" stroke-linecap="round"></path></svg></div><div class="person-salary" id="sal-6">38K</div></div><div class="person-card"><div class="person-avatar normal" id="av-7"><svg viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="14" cy="9" r="5" fill="#60A5FA"></circle><path d="M4 26c0-5.523 4.477-10 10-10s10 4.477 10 10" stroke="#2563EB" stroke-width="2" stroke-linecap="round"></path></svg></div><div class="person-salary" id="sal-7">40K</div></div><div class="person-card"><div class="person-avatar normal" id="av-8"><svg viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="14" cy="9" r="5" fill="#60A5FA"></circle><path d="M4 26c0-5.523 4.477-10 10-10s10 4.477 10 10" stroke="#2563EB" stroke-width="2" stroke-linecap="round"></path></svg></div><div class="person-salary" id="sal-8">45K</div></div><div class="person-card"><div class="person-avatar normal" id="av-9"><svg viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="14" cy="9" r="5" fill="#60A5FA"></circle><path d="M4 26c0-5.523 4.477-10 10-10s10 4.477 10 10" stroke="#2563EB" stroke-width="2" stroke-linecap="round"></path></svg></div><div class="person-salary" style="color:var(--gray-400);" id="sal-9">30K</div></div></div>
+    <div class="people-row" id="people-row"></div>
     <div class="stats-row">
       <div class="stat-box blue-box">
         <div class="sb-label">📊 中位數</div>
-        <div class="sb-value" id="stat-median">32,500</div>
+        <div class="sb-value" id="stat-median">33,000</div>
         <div style="font-size:11px;color:var(--mid-blue);margin-top:4px;">幾乎不動</div>
       </div>
       <div class="stat-box orange-box">
         <div class="sb-label">📈 平均值</div>
-        <div class="sb-value" id="stat-mean">34,200</div>
+        <div class="sb-value" id="stat-mean">—</div>
         <div style="font-size:11px;color:#C2410C;margin-top:4px;">隨第10人起舞</div>
       </div>
     </div>
@@ -331,7 +331,7 @@ input[type=range]::-moz-range-thumb { width:28px; height:28px; border-radius:50%
     </div>
     <p class="body" style="margin-bottom:8px;">你在找工作，HR 傳這則訊息給你。<strong>你心動嗎？</strong></p>
     <p class="body" style="margin-bottom:8px;">這間公司有 10 位員工，點每張牌翻開：</p>
-    <div class="flip-grid" id="flip-grid"><div class="flip-card" id="fc-0" onclick="flipCard(0)"><div class="flip-card-inner"><div class="flip-front"><span class="card-num">員工1</span><span class="card-q">?</span></div><div class="flip-back"><span class="card-num">員工 1</span><span class="card-salary">28,000<br>元/月</span></div></div></div><div class="flip-card" id="fc-1" onclick="flipCard(1)"><div class="flip-card-inner"><div class="flip-front"><span class="card-num">員工2</span><span class="card-q">?</span></div><div class="flip-back"><span class="card-num">員工 2</span><span class="card-salary">30,000<br>元/月</span></div></div></div><div class="flip-card" id="fc-2" onclick="flipCard(2)"><div class="flip-card-inner"><div class="flip-front"><span class="card-num">員工3</span><span class="card-q">?</span></div><div class="flip-back"><span class="card-num">員工 3</span><span class="card-salary">31,000<br>元/月</span></div></div></div><div class="flip-card" id="fc-3" onclick="flipCard(3)"><div class="flip-card-inner"><div class="flip-front"><span class="card-num">員工4</span><span class="card-q">?</span></div><div class="flip-back"><span class="card-num">員工 4</span><span class="card-salary">32,000<br>元/月</span></div></div></div><div class="flip-card" id="fc-4" onclick="flipCard(4)"><div class="flip-card-inner"><div class="flip-front"><span class="card-num">員工5</span><span class="card-q">?</span></div><div class="flip-back"><span class="card-num">員工 5</span><span class="card-salary">33,000<br>元/月</span></div></div></div><div class="flip-card" id="fc-5" onclick="flipCard(5)"><div class="flip-card-inner"><div class="flip-front"><span class="card-num">員工6</span><span class="card-q">?</span></div><div class="flip-back"><span class="card-num">員工 6</span><span class="card-salary">35,000<br>元/月</span></div></div></div><div class="flip-card" id="fc-6" onclick="flipCard(6)"><div class="flip-card-inner"><div class="flip-front"><span class="card-num">員工7</span><span class="card-q">?</span></div><div class="flip-back"><span class="card-num">員工 7</span><span class="card-salary">38,000<br>元/月</span></div></div></div><div class="flip-card" id="fc-7" onclick="flipCard(7)"><div class="flip-card-inner"><div class="flip-front"><span class="card-num">員工8</span><span class="card-q">?</span></div><div class="flip-back"><span class="card-num">員工 8</span><span class="card-salary">40,000<br>元/月</span></div></div></div><div class="flip-card" id="fc-8" onclick="flipCard(8)"><div class="flip-card-inner"><div class="flip-front"><span class="card-num">員工9</span><span class="card-q">?</span></div><div class="flip-back"><span class="card-num">員工 9</span><span class="card-salary">45,000<br>元/月</span></div></div></div><div class="flip-card mystery-card" id="fc-9"><div class="flip-card-inner"><div class="flip-front"><span class="card-num">員工10</span><span class="card-q">🔒</span></div><div class="flip-back boss-reveal"><span class="card-num">老闆 👑</span><span class="card-salary">688,000<br>元/月</span></div></div></div></div>
+    <div class="flip-grid" id="flip-grid"></div>
     <div id="guess-section" style="display:none;">
       <div class="divider"></div>
       <p class="body" style="margin-bottom:12px;">前 9 位都揭曉了。如果公司<strong>平均薪資是 10 萬</strong>，第 10 個人薪資應該是多少？</p>
@@ -652,6 +652,5 @@ function calcPercentile(){
 function fmtNum(n){return n.toLocaleString('zh-TW');}
 function fmtK(n){return n>=10000?Math.round(n/1000)+'K':fmtNum(n);}
 </script>
-
-
-</body></html>
+</body>
+</html>
